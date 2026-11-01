@@ -1,5 +1,13 @@
 # Recovery after “not found”
 
+[![FCI — L’observatoire de la reprise](docs/observatory-cover.svg)](https://fci-recovery-observatory.espace-de-tr-5012.chatgpt.site)
+
+**Explore the interactive laboratory:** [English](https://fci-recovery-observatory.espace-de-tr-5012.chatgpt.site/?lang=en) · [Français](https://fci-recovery-observatory.espace-de-tr-5012.chatgpt.site)
+
+Watch a duplicate commit, change the receiver contract, step through the recorded events, and remove a protection to expose its failure. The bilingual laboratory also compares recovery decisions after evidence loss. Each scenario links to its source trace and offers the raw JSON for inspection.
+
+The animations replay the published synthetic records at commit `a374193`; they do not execute the experiments or evaluate the production FCI engine. Use the commands below to run the actual Python/HTTP/SQLite experiments.
+
 Two reproducible experiments about external effects, missing evidence, and requests still in flight. Python standard library only, with SQLite databases and inspectable execution traces.
 
 **The useful surprise:** receiver-side fencing can reject a late old request, yet still permit a duplicate when that old request committed just before the fence. A complete recovery contract must also account for prior commitment.
