@@ -1,0 +1,9 @@
+{
+  "status": "PASS_ARTIFACT_AUDIT",
+  "modes": 2,
+  "cases": 20,
+  "sqlite_files_read": 60,
+  "normal_optimized_case_results_equal": true,
+  "single_snapshot_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+  "independence": "separate read-only verifier; same author, not an external review"
+}

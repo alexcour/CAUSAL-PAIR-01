@@ -1,0 +1,340 @@
+{
+  "experiment": "CAUSAL-PAIR-01",
+  "status": "PASS_LOCAL_MODEL",
+  "cases": [
+    {
+      "policy": "blind_replay",
+      "world": "never_committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 0,
+      "decision": "EXECUTE",
+      "final_effects": 1,
+      "duplicates": 0,
+      "returned_result": "effect-1",
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": true,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "recovery"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "blind_replay",
+      "world": "committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 1,
+      "decision": "EXECUTE",
+      "final_effects": 2,
+      "duplicates": 1,
+      "returned_result": "effect-2",
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": false,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "initial"
+        ],
+        [
+          2,
+          "business-operation-K",
+          "recovery"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "effect COMMIT",
+        "receipt COMMIT",
+        "worker os._exit(73) before response",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "check_before_call",
+      "world": "never_committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 0,
+      "decision": "EXECUTE",
+      "final_effects": 1,
+      "duplicates": 0,
+      "returned_result": "effect-1",
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": true,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "recovery"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "check_before_call",
+      "world": "committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 1,
+      "decision": "EXECUTE",
+      "final_effects": 2,
+      "duplicates": 1,
+      "returned_result": "effect-2",
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": false,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "initial"
+        ],
+        [
+          2,
+          "business-operation-K",
+          "recovery"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "effect COMMIT",
+        "receipt COMMIT",
+        "worker os._exit(73) before response",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "conservative_standard",
+      "world": "never_committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 0,
+      "decision": "BLOCK_UNCERTAIN",
+      "final_effects": 0,
+      "duplicates": 0,
+      "returned_result": null,
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": false,
+      "effect_rows": [],
+      "trace": [
+        "empty ledger snapshot created",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "conservative_standard",
+      "world": "committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 1,
+      "decision": "BLOCK_UNCERTAIN",
+      "final_effects": 1,
+      "duplicates": 0,
+      "returned_result": null,
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": false,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "initial"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "effect COMMIT",
+        "receipt COMMIT",
+        "worker os._exit(73) before response",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "fci_candidate_rule",
+      "world": "never_committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 0,
+      "decision": "BLOCK_UNCERTAIN",
+      "final_effects": 0,
+      "duplicates": 0,
+      "returned_result": null,
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": false,
+      "effect_rows": [],
+      "trace": [
+        "empty ledger snapshot created",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "fci_candidate_rule",
+      "world": "committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": []
+      },
+      "initial_effects": 1,
+      "decision": "BLOCK_UNCERTAIN",
+      "final_effects": 1,
+      "duplicates": 0,
+      "returned_result": null,
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": false,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "initial"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "effect COMMIT",
+        "receipt COMMIT",
+        "worker os._exit(73) before response",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "authoritative_witness_control",
+      "world": "never_committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": [],
+        "authoritative_results": []
+      },
+      "initial_effects": 0,
+      "decision": "EXECUTE",
+      "final_effects": 1,
+      "duplicates": 0,
+      "returned_result": "effect-1",
+      "prior_result_reconstructed": false,
+      "no_effect_history_completed": true,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "recovery"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    },
+    {
+      "policy": "authoritative_witness_control",
+      "world": "committed",
+      "base_observation_sha256": "48d5bccb8003842f62b144ce143114f7020a5060227877cf91eeaaecce614631",
+      "restored_ledger_sha256": "4fd957ba9ed9903583a3b7e746769f17da4b7686496e40f64cce538f159c3940",
+      "evidence": {
+        "operation": "business-operation-K",
+        "authorization": "valid",
+        "quiescent": true,
+        "ledger_schema_valid": true,
+        "receipts": [],
+        "authoritative_results": [
+          "effect-1"
+        ]
+      },
+      "initial_effects": 1,
+      "decision": "RETURN_PRIOR",
+      "final_effects": 1,
+      "duplicates": 0,
+      "returned_result": "effect-1",
+      "prior_result_reconstructed": true,
+      "no_effect_history_completed": false,
+      "effect_rows": [
+        [
+          1,
+          "business-operation-K",
+          "initial"
+        ]
+      ],
+      "trace": [
+        "empty ledger snapshot created",
+        "effect COMMIT",
+        "receipt COMMIT",
+        "worker os._exit(73) before response",
+        "ledger restored byte-for-byte; effect database untouched"
+      ]
+    }
+  ],
+  "scope": "stdlib SQLite model; no Temporal SDK or production FCI",
+  "environment": {
+    "python": "3.12.14",
+    "sqlite": "3.53.1",
+    "optimize": 0
+  },
+  "claim": "No tested same-evidence policy achieves both duplicate avoidance and completion of the empty history."
+}
