@@ -35,7 +35,7 @@ sequenceDiagram
     N->>R: GET lookup
     R-->>N: NOT_FOUND
     alt old_first
-        Note over O,R: Release old request; COMMIT
+        Note over O,R: Release old request and COMMIT
         N->>R: Recovery operation
     else recovery_first
         N->>R: Recovery operation
