@@ -1,0 +1,30 @@
+{
+  "status": "PASS_ARTIFACT_AUDIT",
+  "cases": 26,
+  "sqlite_files_read": 26,
+  "controlled_traces_equal_across_modes": true,
+  "matrix": {
+    "check_before_call": {
+      "old_first": 2,
+      "recovery_first": 2,
+      "no_old_request": 1
+    },
+    "receiver_fence_only": {
+      "old_first": 2,
+      "old_after_fence": 1,
+      "recovery_first": 1,
+      "no_old_request": 1
+    },
+    "atomic_idempotency": {
+      "old_first": 1,
+      "recovery_first": 1,
+      "no_old_request": 1
+    },
+    "fence_and_reconcile": {
+      "old_first": 1,
+      "recovery_first": 1,
+      "no_old_request": 1
+    }
+  },
+  "scope": "same-session read-only verifier, not external validation"
+}

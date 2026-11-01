@@ -1,51 +1,80 @@
-# CAUSAL-PAIR-01
+# Recovery after “not found”
 
-A synthetic SQLite illustration of recovery decisions when two histories expose identical evidence to a controller.
+Two reproducible experiments about external effects, missing evidence, and requests still in flight. Python standard library only, with SQLite databases and inspectable execution traces.
 
-This is an illustration of a standard information limitation. It is **not** a new impossibility theorem, a Temporal SDK integration test, or an execution of the existing FCI engine. No novelty or FCI advantage is claimed.
+**The useful surprise:** receiver-side fencing can reject a late old request, yet still permit a duplicate when that old request committed just before the fence. A complete recovery contract must also account for prior commitment.
 
-## Construction
+These are synthetic teaching models, not a new impossibility theorem or a benchmark of Temporal or production FCI. Standard receiver-side mechanisms succeed under the explicit assumptions tested here.
 
-- H0: no initial effect has committed.
-- H1: a subprocess commits an effect, commits its receipt in a separate database, then exits with `os._exit(73)` before returning a response.
-- In both histories, the receipt database is restored from the same empty, schema-valid snapshot. The effect database is not restored.
-
-The restored ledger bytes and the serialized base observations are identical. The model assumes no old request remains in flight. The measurement oracle is separate from the evidence supplied to the four baseline rules.
-
-## Results
-
-Final historical effect counts for the same business operation K:
-
-| Rule | H0 | H1 |
-|---|---:|---:|
-| Blind replay | 1 | 2 |
-| Check restored ledger, replay if absent | 1 | 2 |
-| Conventional conservative rule | 0 | 1 |
-| Minimal FCI-labelled candidate rule | 0 | 1 |
-| Positive control with extra authoritative evidence | 1 | 1 |
-
-The two conservative rules deliberately use the same implementation under different labels. Their equality says nothing about a production FCI system. The witness control receives extra information under an exact lookup contract for a quiescent receiver; it is not a same-evidence comparison.
-
-Ten cases per Python mode were run, twenty executions in total. Normal and optimized Python produced identical per-case results. A separate read-only verifier checked all sixty SQLite files and their agreement with the JSON results. That verifier was written in the same session; this is internal checking, not external validation.
-
-## Reproduce and audit
-
-Python 3, standard library only. No network access or credentials are required.
+## Try the counterexample
 
 ```sh
-python3 causal_pair_01/experiment.py --out rerun_normal
-python3 -O causal_pair_01/experiment.py --out rerun_optimized
+git clone https://github.com/alexcour/CAUSAL-PAIR-01.git
+cd CAUSAL-PAIR-01
+python3 late_commit_02/experiment.py --out rerun_fence \
+  --architecture receiver_fence_only --schedule old_first
+```
+
+Open `rerun_fence/receiver_fence_only__old_first/trace.json`. An old HTTP request arrives, an accurate lookup returns `NOT_FOUND`, the old request commits, recovery advances the receiver epoch, and the new request commits again. The final SQLite database contains **two effects for one business operation**.
+
+Now replace `receiver_fence_only` with `fence_and_reconcile` and use a new output directory. That receiver atomically advances the epoch, reconciles prior commitment, and returns the existing result: **one effect** in this schedule.
+
+## Chapter 1 — Lost evidence
+
+[CAUSAL-PAIR-01](causal_pair_01/README.md) restores the receipt database while retaining the effects. One history has no initial effect; another has a committed effect. Both expose exactly the same evidence after restoration.
+
+| Decision rule | No initial effect: final count | Initial effect committed: final count |
+|---|---:|---:|
+| Replay, including after checking the restored ledger | 1 | 2 |
+| Conservative standard / identical minimal FCI-labelled rule | 0 | 1 |
+| Positive control with additional authoritative evidence | 1 | 1 |
+
+The conservative rules avoid duplication but leave the first history unfinished. They deliberately share the same implementation; the experiment demonstrates no FCI advantage. The positive control explicitly receives extra information.
+
+Twenty executions across normal and optimized Python; sixty SQLite files checked by an internal read-only verifier. [Original archive](CAUSAL_PAIR_01_20261101.zip), [French report](causal_pair_01/report.html), [results](causal_pair_01/normal/results.json).
+
+## Chapter 2 — A pending request after an accurate lookup
+
+[LATE-COMMIT-02](late_commit_02/README.md) uses actual localhost HTTP requests, a threaded receiver, and SQLite transactions. The old request has already arrived when the recovery client's lookup reports `NOT_FOUND`.
+
+Final effects for the same operation K:
+
+| Receiver contract | Old commits first | Recovery completes first | No old request |
+|---|---:|---:|---:|
+| Check before call; no target protection | 2 | 2 | 1 |
+| Receiver fencing only | 2 | 1 | 1 |
+| Atomic idempotency | 1 | 1 | 1 |
+| Atomic fencing + reconciliation | 1 | 1 | 1 |
+
+**HTTP arrival, effect commitment, and a returned result are separate events.** The traces show each. Gates control the tested orders, so the example does not depend on getting lucky with timing.
+
+Twenty-six executions across both Python modes produced matching traces and database outcomes. Six deliberate fault injections were detected: disabling the fence, disabling deduplication, and skipping prior-effect reconciliation, each under both modes. [Audit and matrix](late_commit_02/results/audit.json), [example failure trace](late_commit_02/results/normal/receiver_fence_only__old_first/trace.json), [mutation results](late_commit_02/results/mutations/summary.json).
+
+The separate-fence design also has a third ordering: the old request reaches its transaction **after the fence but before the recovery effect**. In that case the old request is rejected and the total remains one effect. This additional case is included in the campaign, giving thirteen cases per Python mode.
+
+## Reproduce the complete HTTP experiment
+
+Python 3.11 or later; no third-party Python packages, credentials, or external services. The HTTP chapter needs permission to bind a localhost port.
+
+```sh
+python3 late_commit_02/experiment.py --out rerun_http/normal
+python3 -O late_commit_02/experiment.py --out rerun_http/optimized
+python3 late_commit_02/audit.py --root rerun_http
+python3 late_commit_02/mutations.py --out rerun_mutations
+python3 -m unittest discover -s late_commit_02/tests -v
 python3 causal_pair_01/audit.py
 ```
 
-The experiment requires a new output directory. The audit reads the delivered `normal/` and `optimized/` datasets alongside the script. Checks remain active under `python -O`.
+Use fresh output directories. Checks stay active with `python -O`. The [CI workflow](.github/workflows/reproduce.yml) reruns both chapters and the fault injections on Python 3.11 and 3.13.
 
-The repository also contains the original `CAUSAL_PAIR_01_20261101.zip` archive. After extracting it, run commands from its `causal_pair_01/` directory as described in `README.txt`. Its HTML report is in French. Statements in that archived report about not yet having published the test describe the state when the archive was created.
+## Where the guarantees stop
 
-## Limits
+The protected effects in Chapter 2 are SQL rows **inside the receiver transaction**. It does not model an independent payment, email, or physical action outside that transaction. Receiver state is retained throughout Chapter 2; Chapter 1 separately studies restored evidence. Combining those failure models requires another test.
 
-This model does not exercise Temporal reset, concurrency, power-loss durability, the gap between the two commits, production FCI, or performance. Blocking prevents a duplicate but leaves H0 unfinished at that point. New authoritative evidence arriving later may enable progress.
+There is no Temporal SDK integration, arbitrary-interleaving proof, storage power-loss qualification, performance benchmark, or production FCI evaluation. The read-only verifiers are internal checks, not external review. A bounded set of schedules and a progress control do not establish a universal exactly-once guarantee.
 
-The next proposed test is a `not found` lookup followed by late commitment from an older request, with and without receiver-side exclusion. No result for that test is claimed here.
+## Help make the contracts stronger
 
-Public discussion and results: https://community.temporal.io/t/recovery-after-an-idempotency-ledger-rollback-authoritative-evidence-and-replay-safety/19893/3
+Can you produce a missing schedule, identify an unjustified assumption, or add a stronger conventional baseline? See [CONTRIBUTING.md](CONTRIBUTING.md). Please use synthetic data and include the exact command, trace, and committed effect count.
+
+By Alexandre Couret. [Public discussion on the Temporal forum](https://community.temporal.io/t/recovery-after-an-idempotency-ledger-rollback-authoritative-evidence-and-replay-safety/19893/3).

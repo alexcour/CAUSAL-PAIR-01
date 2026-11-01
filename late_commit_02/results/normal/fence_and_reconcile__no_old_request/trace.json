@@ -1,0 +1,71 @@
+{
+  "architecture": "fence_and_reconcile",
+  "schedule": "no_old_request",
+  "fault": "none",
+  "controller_observation": {
+    "k": "synthetic-operation-K",
+    "authorization": "valid",
+    "lookup": {
+      "http_status": 200,
+      "body": {
+        "state": "NOT_FOUND"
+      }
+    }
+  },
+  "observation_sha256": "dade2f8a753526afa9ef334bc45b3e5c868d61342f020cde80a6dfb3fa665ec5",
+  "old_response": null,
+  "recovery_response": {
+    "http_status": 200,
+    "body": {
+      "state": "COMMITTED",
+      "result": 1
+    }
+  },
+  "effects": [
+    [
+      1,
+      "synthetic-operation-K",
+      "recovery"
+    ]
+  ],
+  "receipts": [],
+  "epochs": [
+    [
+      "synthetic-operation-K",
+      1
+    ]
+  ],
+  "final_effects": 1,
+  "expected_effects": 1,
+  "http_arrivals": 2,
+  "events": [
+    {
+      "seq": 1,
+      "event": "http_arrival",
+      "method": "GET",
+      "endpoint": "/lookup"
+    },
+    {
+      "seq": 2,
+      "event": "lookup",
+      "state": "NOT_FOUND"
+    },
+    {
+      "seq": 3,
+      "event": "http_arrival",
+      "method": "POST",
+      "endpoint": "/recover",
+      "attempt": "recovery"
+    },
+    {
+      "seq": 4,
+      "event": "effect_committed",
+      "attempt": "recovery",
+      "endpoint": "/recover",
+      "state": "COMMITTED",
+      "result": 1
+    }
+  ],
+  "at_most_one_effect": true,
+  "outcome_matches": true
+}

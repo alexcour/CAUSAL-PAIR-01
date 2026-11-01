@@ -1,0 +1,47 @@
+{
+  "status": "PASS_MUTATION_CHECKS",
+  "checks": [
+    {
+      "fault": "disable_fence",
+      "optimize": 0,
+      "exit_code": 3,
+      "final_effects": 2,
+      "detected": true
+    },
+    {
+      "fault": "disable_dedup",
+      "optimize": 0,
+      "exit_code": 3,
+      "final_effects": 2,
+      "detected": true
+    },
+    {
+      "fault": "ignore_prior_commit",
+      "optimize": 0,
+      "exit_code": 3,
+      "final_effects": 2,
+      "detected": true
+    },
+    {
+      "fault": "disable_fence",
+      "optimize": 1,
+      "exit_code": 3,
+      "final_effects": 2,
+      "detected": true
+    },
+    {
+      "fault": "disable_dedup",
+      "optimize": 1,
+      "exit_code": 3,
+      "final_effects": 2,
+      "detected": true
+    },
+    {
+      "fault": "ignore_prior_commit",
+      "optimize": 1,
+      "exit_code": 3,
+      "final_effects": 2,
+      "detected": true
+    }
+  ]
+}

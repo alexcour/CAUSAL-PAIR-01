@@ -1,0 +1,32 @@
+name: Reproduce synthetic experiments
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Verify HTTP receiver contracts
+        run: python -m unittest discover -s late_commit_02/tests -v
+      - name: Run both Python modes and audit actual files
+        run: |
+          python causal_pair_01/audit.py
+          python causal_pair_01/experiment.py --out ci_output/pair_normal
+          python -O causal_pair_01/experiment.py --out ci_output/pair_optimized
+          python late_commit_02/experiment.py --out ci_output/http/normal
+          python -O late_commit_02/experiment.py --out ci_output/http/optimized
+          python late_commit_02/audit.py --root ci_output/http
+          python late_commit_02/mutations.py --out ci_output/mutations
