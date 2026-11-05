@@ -1,5 +1,17 @@
 # Recovery after “not found”
 
+## Identity and programme
+
+FCI means **Formal Conservative Interposition**, a research and development programme on execution authorization and recovery after incidents.
+
+**Alexandre Couret**  
+**Président de la société CONFIANCE**  
+**Porteur du programme FCI — Formal Conservative Interposition**
+
+[Présentation FCI / English overview](docs/FCI_PRESENTATION_FR_EN.md) · [Author](https://www.couretunification.fr/a-propos/) · [HAL](https://cv.hal.science/alexandre-couret) · [Contact](https://www.couretunification.fr/contact/).
+
+The experiments below are bounded public teaching models. Their guarantees and the status of the wider FCI programme are distinct.
+
 [![FCI — L’observatoire de la reprise](docs/observatory-cover.svg)](https://fci-recovery-observatory.espace-de-tr-5012.chatgpt.site)
 
 **Explore the interactive laboratory:** [English](https://fci-recovery-observatory.espace-de-tr-5012.chatgpt.site/?lang=en) · [Français](https://fci-recovery-observatory.espace-de-tr-5012.chatgpt.site)
