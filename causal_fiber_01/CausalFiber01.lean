@@ -34,14 +34,19 @@ theorem image_reconstructible_iff_fiber_constant
   · rintro ⟨r, hr⟩ a b hab
     calc
       v a = r (p a) ⟨a, rfl⟩ := hr a
-      _ = r (p b) ⟨b, rfl⟩ := by cases hab; rfl
+      _ = r (p b) ⟨b, rfl⟩ := by
+        have hx : (⟨p a, ⟨a, rfl⟩⟩ : {o : O // ∃ h : H, p h = o}) =
+            ⟨p b, ⟨b, rfl⟩⟩ := Subtype.ext hab
+        exact congrArg
+          (fun x : {o : O // ∃ h : H, p h = o} => r x.val x.property)
+          hx
       _ = v b := (hr b).symm
   · intro hc
     classical
     refine ⟨(fun o ho => v (Classical.choose ho)), ?_⟩
     intro h
-    exact hc h (Classical.choose ⟨h, rfl⟩)
-      (Classical.choose_spec ⟨h, rfl⟩).symm
+    let ho : ∃ h' : H, p h' = p h := ⟨h, rfl⟩
+    exact hc h (Classical.choose ho) (Classical.choose_spec ho).symm
 
 inductive History where
   | timely | late | stale | missing
@@ -90,3 +95,69 @@ theorem extra_must_separate
 theorem missing_refused : authorized .missing = false := rfl
 theorem stale_refused : authorized .stale = false := rfl
 theorem late_refused : authorized .late = false := rfl
+
+/- Conservative authorization is weaker than exact verdict reconstruction.
+   The observation map and the permitted-history predicate must be justified
+   independently when connecting this theorem to a verifier. -/
+def UniformlyAllowed {H : Type u} {O : Type v}
+    (p : H → O) (allowed : H → Prop) (o : O) : Prop :=
+  ∀ h, p h = o → allowed h
+
+theorem conservative_sound
+    {H : Type u} {O : Type v} (p : H → O) (allowed : H → Prop)
+    (h : H) (permit : UniformlyAllowed p allowed (p h)) : allowed h :=
+  permit h rfl
+
+theorem sound_policy_iff_uniform
+    {H : Type u} {O : Type v} (p : H → O) (allowed : H → Prop)
+    (permit : O → Prop) :
+    (∀ h, permit (p h) → allowed h) ↔
+      (∀ o, permit o → UniformlyAllowed p allowed o) := by
+  constructor
+  · intro sound o hp h he
+    apply sound h
+    rw [he]
+    exact hp
+  · intro uniform h hp
+    exact uniform (p h) hp h rfl
+
+/- CAUSAL-PAIR-01 bridge: one quiescent operation, initial effects 0 or 1,
+   restored empty receipt ledger, non-idempotent receiver. This finite model
+   is linked to measured SQLite traces by bridge.py, not by a refinement proof. -/
+namespace Recovery
+
+inductive World where
+  | empty | committed
+  deriving DecidableEq, Repr
+
+inductive Action where
+  | execute | returnPrior | block
+  deriving DecidableEq, Repr
+
+def observation (_ : World) : Unit := ()
+
+def required : World → Action
+  | .empty => .execute
+  | .committed => .returnPrior
+
+theorem no_exact_recovery :
+    ¬ ∃ r : Unit → Action, ∀ h, required h = r (observation h) := by
+  exact collision_no_factor observation required .empty .committed rfl (by decide)
+
+def effects : World → Action → Nat
+  | .empty, .execute => 1
+  | .empty, _ => 0
+  | .committed, .execute => 2
+  | .committed, _ => 1
+
+theorem no_safe_and_live_shared_action :
+    ¬ ∃ a : Action, effects .committed a ≤ 1 ∧ effects .empty a = 1 := by
+  rintro ⟨a, ha⟩
+  cases a <;> simp [effects] at ha
+
+theorem block_safe (w : World) : effects w .block ≤ 1 := by
+  cases w <;> decide
+
+theorem block_not_live : effects .empty .block = 0 := rfl
+
+end Recovery

@@ -1,0 +1,10 @@
+test_adding_hidden_verdict_to_observation_is_detected (test_experiment.FiberAuditTests.test_adding_hidden_verdict_to_observation_is_detected) ... ok
+test_complete_binary_enrichment_search (test_experiment.FiberAuditTests.test_complete_binary_enrichment_search) ... ok
+test_constant_extra_is_detected (test_experiment.FiberAuditTests.test_constant_extra_is_detected) ... ok
+test_ignoring_causal_order_is_detected (test_experiment.FiberAuditTests.test_ignoring_causal_order_is_detected) ... ok
+test_ignoring_freshness_is_detected (test_experiment.FiberAuditTests.test_ignoring_freshness_is_detected) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

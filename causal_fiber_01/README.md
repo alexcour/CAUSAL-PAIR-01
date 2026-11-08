@@ -1,26 +1,45 @@
-# CAUSAL-FIBER-01 — collisions de projections causales
+# CAUSAL-FIBER-01 — audited finite reconstruction model
 
-**Status:** toy mathematics; Python assertions locally re-executed on 2026-11-08; Lean compilation **not yet performed**. No novelty claimed for the abstract factorization theorem.
+Local audit on 8 November 2026: **Lean 4.29.1 compilation passed**, all fifteen
+selected declarations have transitive axiom reports, and Python checks passed
+in normal and optimized modes. See `RESEARCH_NOTE.md` for scope and assumptions.
+The abstract factorization criterion is classical; no novelty is claimed.
 
-## Result
+## Corrections to the initial branch
 
-For a map p:H→O of retained observations and a verdict v:H→V, an exact reconstructor on p(H) exists iff v is constant on every fiber of p. A pair with equal p and unequal v obstructs exact reconstruction.
+The source at `09b23d3b5bd5213680973480fef8ec823c27d5e0` did not compile:
+dependent equality elimination failed, and an untyped existential witness let
+Lean infer the wrong predicate for `Classical.choose_spec`. Both are corrected.
+The Python assertion `verdict(h) == h.receipt and extra(h)` also failed normally
+because it omitted parentheses around the reconstructed verdict. All checks
+now raise explicit exceptions and remain active under `python -O`.
 
-Synthetic histories: timely, late and stale share the observation receipt=true while the toy verdict differs; missing has receipt=false. The experiment displays two conflicting pairs. This is NOT a test of the actual FCI verifier, and the Boolean enrichment in Lean contains the verdict itself (an information-theoretic existence witness, not an implementable sensor or certificate). The Python enrichment uses a toy policy oracle.
+## Reproduce
 
-## Reproduction
+Use Python 3.11+ with its standard library and the Lean executable specified by
+`lean-toolchain` (no Mathlib dependency). From the repository root:
 
 ```sh
-python3 causal_fiber_01/experiment.py
-lean causal_fiber_01/CausalFiber01.lean
+python causal_fiber_01/verify.py --lean /path/to/lean --out /fresh/audit-directory
 ```
 
-The second command is a requested verification step, not a completed one. No `sorry` is present in the proposed source.
+The output directory must not exist. The runner compiles the module, prints
+axioms, rejects a false Lean statement, executes the toy model and four Python
+mutations under both modes, reruns the ten SQLite cases in each mode, and
+checks sixty resulting SQLite files read-only. It writes logs and a SHA-256
+source receipt. This verification uses no HTTP server or external service.
 
-## FCI and existing CAUSAL-PAIR-01
+The toy model exhausts sixteen binary enrichments of four histories; four
+suffice. One bit is sufficient and zero bits fail **in that declared model**.
+The enrichment still uses a policy oracle; it is not an implementable proof
+source. The SQLite bridge independently concerns lost commitment evidence,
+not the toy model's timeliness/freshness predicates.
 
-This module is complementary to `causal_pair_01` (restored receipt ambiguity) and `late_commit_02` (in-flight effect ambiguity). It does not replace or change their baselines or support any comparative advantage for FCI.
+`UniformlyAllowed` formalizes a conservative permit rule. The `Recovery`
+namespace instantiates the collision obstruction for the two SQLite worlds
+and proves the failure of any shared action to ensure both safety and
+completion of the empty history in the declared one-step action model.
 
-Next: bind the projection to actual verifier inputs; specify scope, freshness, authority, causal order, clock/trust assumptions, and restoration survival; check the three refusal cases; compare conventional baselines on equal trust resources. Separate abstract theorem, model checking, software execution, and physical evidence.
-
-Do not advertise this branch as a proof of physical enforcement or as a theorem of FCI superiority.
+Local validation is not a proof of source-code refinement, production FCI,
+physical enforcement, cryptographic freshness, or superiority to conventional
+receiver protection. The draft PR remains subject to independent review.

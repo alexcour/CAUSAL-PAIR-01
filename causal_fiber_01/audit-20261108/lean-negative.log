@@ -1,0 +1,3 @@
+<audit_workspace>\verification-final\NegativeCollision.lean:2:72: error: Tactic `decide` proved that the proposition
+  authorized History.timely = authorized History.late
+is false
