@@ -1,0 +1,92 @@
+/-! CAUSAL-FIBER-01: toy model; not a production FCI proof. -/
+universe u v w
+
+def FiberConstant {H : Type u} {O : Type v} {V : Type w}
+    (p : H → O) (v : H → V) : Prop :=
+  ∀ a b : H, p a = p b → v a = v b
+
+theorem factor_implies_fiber_constant
+    {H : Type u} {O : Type v} {V : Type w}
+    (p : H → O) (v : H → V)
+    (r : O → V) (hr : ∀ h, v h = r (p h)) :
+    FiberConstant p v := by
+  intro a b hab
+  rw [hr a, hr b, hab]
+
+theorem collision_no_factor
+    {H : Type u} {O : Type v} {V : Type w}
+    (p : H → O) (v : H → V)
+    (a b : H) (same : p a = p b) (different : v a ≠ v b) :
+    ¬ ∃ r : O → V, ∀ h, v h = r (p h) := by
+  rintro ⟨r, hr⟩
+  exact different (factor_implies_fiber_constant p v r hr a b same)
+
+def ImageReconstructible {H : Type u} {O : Type v} {V : Type w}
+    (p : H → O) (v : H → V) : Prop :=
+  ∃ r : (o : O) → (∃ h : H, p h = o) → V,
+    ∀ h, v h = r (p h) ⟨h, rfl⟩
+
+theorem image_reconstructible_iff_fiber_constant
+    {H : Type u} {O : Type v} {V : Type w}
+    (p : H → O) (v : H → V) :
+    ImageReconstructible p v ↔ FiberConstant p v := by
+  constructor
+  · rintro ⟨r, hr⟩ a b hab
+    calc
+      v a = r (p a) ⟨a, rfl⟩ := hr a
+      _ = r (p b) ⟨b, rfl⟩ := by cases hab; rfl
+      _ = v b := (hr b).symm
+  · intro hc
+    classical
+    refine ⟨(fun o ho => v (Classical.choose ho)), ?_⟩
+    intro h
+    exact hc h (Classical.choose ⟨h, rfl⟩)
+      (Classical.choose_spec ⟨h, rfl⟩).symm
+
+inductive History where
+  | timely | late | stale | missing
+  deriving DecidableEq, Repr
+
+inductive Observation where
+  | receipt | noReceipt
+  deriving DecidableEq, Repr
+
+def observe : History → Observation
+  | .timely | .late | .stale => .receipt
+  | .missing => .noReceipt
+
+def authorized : History → Bool
+  | .timely => true
+  | .late | .stale | .missing => false
+
+theorem receipt_collision : observe .timely = observe .late := rfl
+theorem verdict_collision : authorized .timely ≠ authorized .late := by decide
+
+theorem no_reconstructor :
+    ¬ ∃ r : Observation → Bool, ∀ h, authorized h = r (observe h) := by
+  exact collision_no_factor observe authorized .timely .late
+    receipt_collision verdict_collision
+
+def enrichedObserve (h : History) : Observation × Bool :=
+  (observe h, authorized h)
+
+def enrichedReconstructor : Observation × Bool → Bool := Prod.snd
+
+theorem enriched_exact (h : History) :
+    authorized h = enrichedReconstructor (enrichedObserve h) := rfl
+
+theorem extra_must_separate
+    {E : Type u} (extra : History → E)
+    (r : Observation × E → Bool)
+    (hr : ∀ h, authorized h = r (observe h, extra h)) :
+    extra .timely ≠ extra .late := by
+  intro he
+  apply verdict_collision
+  calc
+    authorized .timely = r (observe .timely, extra .timely) := hr .timely
+    _ = r (observe .late, extra .late) := by rw [receipt_collision, he]
+    _ = authorized .late := (hr .late).symm
+
+theorem missing_refused : authorized .missing = false := rfl
+theorem stale_refused : authorized .stale = false := rfl
+theorem late_refused : authorized .late = false := rfl
