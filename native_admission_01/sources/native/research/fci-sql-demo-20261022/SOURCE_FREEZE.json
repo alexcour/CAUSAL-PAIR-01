@@ -1,0 +1,104 @@
+{
+  "schema": "FCI-SQL-DEMO-SOURCE/1",
+  "repository": "alexcour/couret-multi-ia-lab",
+  "commit": "7a0784a4dc8d9953487ebeb54bd42df834d40eb4",
+  "role": "byte-preserved RC3/LIFE01/REF3/REF4 dependencies; no qualification transferred",
+  "files": [
+    {
+      "path": "research/fci-cou40-ref4-20261020/integrated_service.py",
+      "git_blob_sha": "f85255860243b5ce2fa911319ea6ca8bff68307f"
+    },
+    {
+      "path": "research/fci-cou40-ref4-20261020/test_integrated_service.py",
+      "git_blob_sha": "573539f2a6a76ae910f59f25268c59b41e91a856"
+    },
+    {
+      "path": "research/fci-cou40-ref4-20261020/INTERFACE_AND_SCOPE.md",
+      "git_blob_sha": "d3dbf9ccbfd649c4f1cd339afb6dd4e84f388dcd"
+    },
+    {
+      "path": "research/fci-cou40-ref4-20261020/trace_capture.py",
+      "git_blob_sha": "8f1100bfd9ec83cfb609a8d0044519d967e65a06"
+    },
+    {
+      "path": "research/fci-cou40-ref3-20261020/composition_runtime.py",
+      "git_blob_sha": "7db9da5bd16f204e6c299099d546358734e71625"
+    },
+    {
+      "path": "research/fci-cou40-ref3-20261020/composition_fixture.py",
+      "git_blob_sha": "7599e67334ee40b0cebe12a54646aea5956f4a07"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/service.py",
+      "git_blob_sha": "d82e64d55d9c7f5e08b352bfbbc2ea498abba2e7"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/policy.py",
+      "git_blob_sha": "16d38f58972e6f1f0d6772b0578ded536e12431b"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/fixture_setup.py",
+      "git_blob_sha": "0d8f232e6c6f4ec07661216d6bf3c3431b0bb8f3"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/spend_ledger.py",
+      "git_blob_sha": "58dd4ac4faf6a7d7c30ee527178a730787a87ef6"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/finalizing_consumer.py",
+      "git_blob_sha": "24b2c5bb309ff9b58f052ec772b7e7dcc3b50002"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/guarded_consumer.py",
+      "git_blob_sha": "002d65001e43a2598f6e764cf537e603d9822e67"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/observation.py",
+      "git_blob_sha": "5f7ecbed37835a6a3286c85b23ef168b7d6a95c7"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/strict_json.py",
+      "git_blob_sha": "eb6aed9c6095514ee079dc7326a9e434cbd9647d"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/vendor.py",
+      "git_blob_sha": "87a205608082994589d7e0aca7d7b1b25d347ec8"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/fci_hardened/__init__.py",
+      "git_blob_sha": "a4e215cdb30f7631beaade72387acb56e4c3edd2"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/requirements.txt",
+      "git_blob_sha": "55c4e86c65c4136ace109252da8b4081be9dd162"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/FCI_OBS_IF1_20261017/interface.py",
+      "git_blob_sha": "b347d2d2023398659e39e562026991c38a6f9800"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/fci_repair05_life01/base05/base04/base03/anchored.py",
+      "git_blob_sha": "473421011e47971ef768f35aab4e00635e329c5b"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/fci_repair05_life01/base05/base04/base03/base01/authority.py",
+      "git_blob_sha": "54c4a064d426b98f8637765d741c9d79a2785a1a"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/fci_repair05_life01/base05/base04/dispatch.py",
+      "git_blob_sha": "b43307be72a5da93aaaefa175f511c05a55203c4"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/fci_repair05_life01/base05/consumer.py",
+      "git_blob_sha": "df6d6141c2d5c7eaa44e6574d3cc72414173a20f"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/fci_repair05_life01/lifecycle.py",
+      "git_blob_sha": "42ed3785836a828147dc6cb8e360201eef9314f1"
+    },
+    {
+      "path": "research/fci-c02-a04-20261018/vendor/observer_v1/observer.py",
+      "git_blob_sha": "0700fe233ef03da239cce9b3e5df67e156ff7360"
+    }
+  ]
+}
