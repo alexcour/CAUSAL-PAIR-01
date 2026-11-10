@@ -2,7 +2,7 @@
 
 This package preserves the exact71 deployed source files from the internally received C-admission campaign of10 November2026 and its original manifest (SHA256 `fb7f6b88d5cdfe4b903cf1ab6ac4753c8a64a9b37694461f9b200adff8e36cf8`). The default public reproduction uses the separately versioned offline receiver1.1: it corrects a mutation that could be a no-op when the two client replies were reversed. All engine, admission-policy and Participant bytes remain unchanged. See READER_V11.md. Historical private commit references are provenance, not fetch dependencies: all required source files are included here.
 
-**Public receiver1.1 is awaiting fresh CI reception.** The first exact-source run completed reception but failed while writing the provenance file into a root-owned directory (CI42903333228). The next run exposed the no-op mutation under reversed client replies (CI42903610004). Neither overall failed run is relabelled successful. See RECEPTION.md for the final run when available.
+**Public receiver1.1 received:** [CI42904156448 succeeded](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/42904156448), source `c1b9167573fa849e8c1726d5c5363beacabf6995`. Four admissions without execution and four historical refusals; local/CI normal/optimized reader outputs identical. See [RECEPTION.md](RECEPTION.md) for artifact hashes and preserved failures. This is a public programme-run reproduction, not an independent audit.
 
 ## Run in a disposable Linux VM
 

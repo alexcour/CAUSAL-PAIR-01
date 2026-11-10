@@ -1,5 +1,11 @@
 # Recovery after “not found”
 
+## Native admission01 — public standalone reproduction
+
+[Source package and commands](native_admission_01/README.md) · [Public CI reception and preserved failures](native_admission_01/RECEPTION.md).
+
+Eight fresh native cases receive four C admissions without execution and four historical refusals. The separately versioned offline receiver1.1 fixes a no-op mutation exposed by reversed client replies; the original71 sources remain preserved. Normal native-service restart, C activation/execution and independent external validation remain open.
+
 ## Public bulletin — 10 November 2026
 
 [Couret–Unification — Recherche ouverte](https://couret-recherche-publications.espace-de-tr-5012.chatgpt.site) · [Bulletin and English summary](docs/publication-20261110/bulletin.md) · [Announcement](docs/publication-20261110/COMMUNIQUE.md).
