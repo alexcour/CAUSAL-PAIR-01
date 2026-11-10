@@ -1,0 +1,31 @@
+name: Public native admission01
+on:
+  push:
+    branches: [main]
+    paths: ['native_admission_01/**', '.github/workflows/native-admission01.yml']
+  pull_request:
+    branches: [main]
+    paths: ['native_admission_01/**', '.github/workflows/native-admission01.yml']
+permissions: {contents: read}
+jobs:
+  reproduce:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env: {PYTHONDONTWRITEBYTECODE: '1'}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', persist-credentials: false}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with: {python-version: '3.12'}
+      - name: Verify and run standalone source package
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python -m pip install cryptography==50.0.2
+          python -I -B native_admission_01/reproduce.py --verify-only
+          sudo -n "$(command -v python)" -I -B native_admission_01/reproduce.py --disposable-linux --out "$PWD/public-admission-results"
+          git rev-parse HEAD > public-admission-results/EXECUTED_PUBLIC_COMMIT.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with: {name: 'public-native-admission-${{ github.run_id }}', path: public-admission-results/, retention-days: 90}

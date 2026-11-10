@@ -1,0 +1,77 @@
+{
+  "schema": "LIVE-HOLDER-INPUTS/1",
+  "base": "849f566d97c927a6c4628048ae7848197a033e71",
+  "native_snapshot": "684f25dc0cb236131beafeb4c713bc917f63f5d9",
+  "files": [
+    {
+      "argument": "support_root",
+      "path": "fci-same-k-handoff-20261030/run_native_bridge.py",
+      "full": "research/fci-same-k-handoff-20261030/run_native_bridge.py",
+      "ref": "3c721c41183c85310dde52589f33992a41062668",
+      "git_blob": "578d082e27f06e5a7362475f5a7698cf4b091c3e",
+      "sha256": "0678f7d41572e3b9855e468a64232b60471ada6d83d1062d2fae96a720b3d7f4"
+    },
+    {
+      "argument": "support_root",
+      "path": "fci-same-k-handoff-20261030/native_bridge.py",
+      "full": "research/fci-same-k-handoff-20261030/native_bridge.py",
+      "ref": "3c721c41183c85310dde52589f33992a41062668",
+      "git_blob": "4caabf90a570dedf7db909bf1d2c6ebb1a9c74ac",
+      "sha256": "adee3d2ef1230f5ab07774247663adc5eb19092dedd37e756e025e3f071c9b66"
+    },
+    {
+      "argument": "support_root",
+      "path": "fci-same-k-handoff-20261030/handoff.py",
+      "full": "research/fci-same-k-handoff-20261030/handoff.py",
+      "ref": "3c721c41183c85310dde52589f33992a41062668",
+      "git_blob": "f2372a1165bdc75268f90cb163994a3741ef5a73",
+      "sha256": "db3d1ce75376a42047d391de34e4ccd04a7c35bb9e649d0352905b1f4fabba61"
+    },
+    {
+      "argument": "support_root",
+      "path": "fci-same-k-handoff-20261030/uds_service.py",
+      "full": "research/fci-same-k-handoff-20261030/uds_service.py",
+      "ref": "3c721c41183c85310dde52589f33992a41062668",
+      "git_blob": "4c4258e937366c46ce64843c0171ddc823431759",
+      "sha256": "7b4d67416b28c6c93e2ea2c6556d0650623df018e1664b1fa1a0bc19d4884746"
+    },
+    {
+      "argument": "support_root",
+      "path": "fci-same-k-handoff-20261030/NATIVE_SOURCES.json",
+      "full": "research/fci-same-k-handoff-20261030/NATIVE_SOURCES.json",
+      "ref": "3c721c41183c85310dde52589f33992a41062668",
+      "git_blob": "c7cd07491fbd00b9e44d4744695db48aed7650eb",
+      "sha256": "57fa6f6cbd22ba587f9da5a6e9adea83d3a4778df8260460c8e2324bc7717291"
+    },
+    {
+      "argument": "reference_root",
+      "path": "certified_bridge.py",
+      "full": "research/fci-certified-handoff-20261031/certified_bridge.py",
+      "ref": "165492bb26d0cc3e677ef290e3970b14a0680168",
+      "git_blob": "451e053e857a75e8b3edebfd487734bd6af4884c",
+      "sha256": "2d20efac4a899c783d1533f2a9b6607e34d3d7a1c220fc2404fd6ca7c768e2a0"
+    },
+    {
+      "argument": "recovery_root",
+      "path": "run_recovery.py",
+      "full": "research/fci-verified-recovery-20261101/run_recovery.py",
+      "ref": "5b93c0db92acd2a09bc4557ac2b84a0077fcac8a",
+      "git_blob": "f646c1613aea58efcdbe261c2660de47987c11e0",
+      "sha256": "f254221425ce9c9e326626bba44a003930c30f0b4e689e05d8e003612de9ff5f"
+    },
+    {
+      "argument": "recovery_root",
+      "path": "recovery.py",
+      "full": "research/fci-verified-recovery-20261101/recovery.py",
+      "ref": "5b93c0db92acd2a09bc4557ac2b84a0077fcac8a",
+      "git_blob": "bf251922a484ed16353d7478511bc8b536925fe9",
+      "sha256": "2a375e21dd5e5bbde4f49e53d38dceddb3e56a79eb663580e40b1b167cd4cd69"
+    }
+  ],
+  "wire": {
+    "ref": "6b2dbfa53571d0a1a113ea380c07457385f918a0",
+    "full": "research/fci-r3-http-temporal-20261104/wire.py",
+    "git_blob": "b388592bfafc086fc47742e1f596ad327e812959",
+    "sha256": "7833019187c0393bf9231ab35387ba72b87bf1d443f3905a2e8d29214c6b9715"
+  }
+}
