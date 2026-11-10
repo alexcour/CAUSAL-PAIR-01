@@ -1,5 +1,11 @@
 # Recovery after “not found”
 
+## Public bulletin — 10 November 2026
+
+[Couret–Unification — Recherche ouverte](https://couret-recherche-publications.espace-de-tr-5012.chatgpt.site) · [Bulletin and English summary](docs/publication-20261110/bulletin.md) · [Announcement](docs/publication-20261110/COMMUNIQUE.md).
+
+The bulletin distinguishes these public teaching models from a separate internally received C-admission study. C activation and execution remain unqualified; the bulletin does not release the detailed private technical archives or claim independent validation. Mathematical research and MIRAGE have their own scopes.
+
 ## Identity and programme
 
 FCI means **Formal Conservative Interposition**, a research and development programme on execution authorization and recovery after incidents.

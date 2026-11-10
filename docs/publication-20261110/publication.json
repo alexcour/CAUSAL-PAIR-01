@@ -1,0 +1,53 @@
+{
+  "schema": "couret-public-bulletin/1",
+  "date": "2026-11-10",
+  "author": "Alexandre Couret",
+  "language": "fr",
+  "publication_scope": "Public presentation and bounded internal-results summary. Detailed private technical archives are not included.",
+  "FCI": {
+    "name": "Formal Conservative Interposition",
+    "nature": "Research on execution authorization and recovery after incidents",
+    "public_models": "https://github.com/alexcour/CAUSAL-PAIR-01",
+    "production_qualified": false,
+    "general_superiority_established": false,
+    "latest_internal_admission_study": {
+      "date": "2026-11-10",
+      "native_captures": 8,
+      "C_admission_only": 4,
+      "historical_admission_refusals": 4,
+      "admission_rollbacks": 4,
+      "role_denials": 32,
+      "grant_authority_fault_holds": 16,
+      "admission_component_restart_retrievals": 4,
+      "native_permit_issue_refusals": 8,
+      "native_permit_issued": false,
+      "C_executed": false,
+      "normal_native_service_restart_qualified": false,
+      "independent_audit": false,
+      "public_reproduction": false,
+      "internal_artifact_sha256": "77f31b07016b7684f480447382008400828293cf911c884f786d791f2cceb1fd",
+      "internal_artifact_bytes": 455877,
+      "authority_contract": "Trusted OS, supervisor and owner; retained authority; no live clones assumed. View equality is not a temporal bound or co-restore protection.",
+      "qualification": "Internal bounded reception; activation and execution remain open."
+    }
+  },
+  "MIRAGE": {
+    "nature": "Research programme for organizing the confrontation and verification of responses",
+    "public_projection_date": "2026-11-09",
+    "documentary_reception": "OBSERVED",
+    "documents": 3,
+    "scientific_verification": false,
+    "independent_validation_established": false,
+    "monetary_cost": "NOT_MEASURED",
+    "methods": ["Versioned sources", "Deterministic checks", "Durable receipts", "Reuse of results"]
+  },
+  "mathematics": {
+    "separate_from_FCI_security_claims": true,
+    "public_repository": "https://github.com/alexcour/couret-finite-verifications"
+  },
+  "limits": [
+    "Publication authorization is not scientific validation.",
+    "Documentary reception is not a general FCI guarantee or an economic advantage.",
+    "The public teaching models and the internal native study are distinct."
+  ]
+}
