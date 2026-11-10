@@ -1,5 +1,16 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation — reproduction publique autonome reçue
+
+Une [reproduction publique autonome](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_admission_01) est désormais disponible : sources originales conservées, lecteur versionné1.1, lanceur Linux et commandes. [CI42904156448 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/42904156448), source exécutée `c1b9167573fa849e8c1726d5c5363beacabf6995`. Huit nouveaux cas : quatre admissions sans exécution, quatre refus historiques. Sorties des lecteurs CI/local normal/optimisé identiques.
+
+Le lecteur1.1 inverse l’indicateur du second client pour éviter qu’une mutation consistant à le remettre à true ne soit parfois sans effet. Les composants natifs et la politique d’admission restent inchangés. Les deux premiers lots publics échoués sont conservés et expliqués dans le [reçu public](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_admission_01/RECEPTION.md). L’artefact final,228954 octets, a pour SHA256 `bba8b852607b4fa70d47de907fa2b6a1dd9d06cdae2988e37a54199af6614100`.
+
+Cette reproduction est exécutée par le programme, pas par un auditeur indépendant. Activation, permis, service natif normal et exécution C restent à qualifier. Les archives privées historiques ne sont pas ouvertes ; les sources du paquet et les nouveaux artefacts publics le sont. Le corps du bulletin initial ci-dessous est conservé pour sa provenance datée.
+
+---
+
+
 **Alexandre Couret · FCI, MIRAGE et recherches distinctes en mathématiques.**
 
 Ce bulletin donne un accès aux ressources publiques et présente une synthèse bornée de travaux internes. Il distingue les expériences synthétiques ouvertes, les réceptions techniques internes et les garanties qui restent à établir.

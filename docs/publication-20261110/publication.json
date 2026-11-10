@@ -3,7 +3,7 @@
   "date": "2026-11-10",
   "author": "Alexandre Couret",
   "language": "fr",
-  "publication_scope": "Public presentation and bounded internal-results summary. Detailed private technical archives are not included.",
+  "publication_scope": "Public presentation, original internal summary, and separate standalone public reproduction with versioned receiver1.1. Historical private captures remain private.",
   "FCI": {
     "name": "Formal Conservative Interposition",
     "nature": "Research on execution authorization and recovery after incidents",
@@ -29,6 +29,26 @@
       "internal_artifact_bytes": 455877,
       "authority_contract": "Trusted OS, supervisor and owner; retained authority; no live clones assumed. View equality is not a temporal bound or co-restore protection.",
       "qualification": "Internal bounded reception; activation and execution remain open."
+    },
+    "public_reproduction_v11": {
+      "date": "2026-11-10",
+      "source_url": "https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_admission_01",
+      "ci_url": "https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/42904156448",
+      "executed_commit": "c1b9167573fa849e8c1726d5c5363beacabf6995",
+      "reader_version": "1.1",
+      "native_captures": 8,
+      "C_admission_only": 4,
+      "historical_admission_refusals": 4,
+      "independent_audit": false,
+      "C_executed": false,
+      "native_permit_issued": false,
+      "artifact_sha256": "bba8b852607b4fa70d47de907fa2b6a1dd9d06cdae2988e37a54199af6614100",
+      "original_sources_preserved": 71,
+      "staged_offline_reader_changed": true,
+      "earlier_failed_public_runs": [
+        42903333228,
+        42903610004
+      ]
     }
   },
   "MIRAGE": {
@@ -39,7 +59,12 @@
     "scientific_verification": false,
     "independent_validation_established": false,
     "monetary_cost": "NOT_MEASURED",
-    "methods": ["Versioned sources", "Deterministic checks", "Durable receipts", "Reuse of results"]
+    "methods": [
+      "Versioned sources",
+      "Deterministic checks",
+      "Durable receipts",
+      "Reuse of results"
+    ]
   },
   "mathematics": {
     "separate_from_FCI_security_claims": true,
