@@ -1,8 +1,8 @@
 # Native admission01 — standalone public reproduction
 
-This package publishes the exact71 deployed source files from the internally received C-admission campaign of10 November2026. It adds a standalone launcher; no engine, policy, participant or offline-reader bytes are changed. The source manifest is preserved byte-for-byte (SHA256 `fb7f6b88d5cdfe4b903cf1ab6ac4753c8a64a9b37694461f9b200adff8e36cf8`). Historical private commit references inside the sources are provenance, not fetch dependencies: all required source files are included here.
+This package preserves the exact71 deployed source files from the internally received C-admission campaign of10 November2026 and its original manifest (SHA256 `fb7f6b88d5cdfe4b903cf1ab6ac4753c8a64a9b37694461f9b200adff8e36cf8`). The default public reproduction uses the separately versioned offline receiver1.1: it corrects a mutation that could be a no-op when the two client replies were reversed. All engine, admission-policy and Participant bytes remain unchanged. See READER_V11.md. Historical private commit references are provenance, not fetch dependencies: all required source files are included here.
 
-**Initial public status: source package prepared; new public CI not yet received.** The historical run is not a substitute for the new public reproduction. See RECEPTION.md when available for the actual public run and artifact fingerprints.
+**Public receiver1.1 is awaiting fresh CI reception.** The first exact-source run completed reception but failed while writing the provenance file into a root-owned directory (CI42903333228). The next run exposed the no-op mutation under reversed client replies (CI42903610004). Neither overall failed run is relabelled successful. See RECEPTION.md for the final run when available.
 
 ## Run in a disposable Linux VM
 

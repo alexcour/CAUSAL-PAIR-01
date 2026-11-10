@@ -11,6 +11,19 @@ def verify_sources():
         p=pathlib.PurePosixPath(name);need(not p.is_absolute() and '..' not in p.parts,'CONFINED_SOURCE')
         need(hashlib.sha256((HERE/'sources'/name).read_bytes()).hexdigest()==digest,'SOURCE:'+name)
     return manifest
+def stage_sources(stage,manifest):
+    shutil.copytree(HERE/'sources',stage,dirs_exist_ok=True)
+    original=(HERE/'sources/admission/receive.py').read_bytes()
+    needle=b"lambda x:x['admission_pair'][1]['response']['result']['result'].update(new_allocation=True)"
+    replacement=b"lambda x:x['admission_pair'][1]['response']['result']['result'].update(new_allocation=not x['admission_pair'][1]['response']['result']['result']['new_allocation'])"
+    need(original.count(needle)==1,'ONE_VERSIONED_MUTATION_FIX')
+    revised=original.replace(needle,replacement)
+    need(revised==(HERE/'receive_v11.py').read_bytes(),'EXACT_READER_V11_DELTA')
+    (stage/'admission/receive.py').write_bytes(revised)
+    effective=json.loads(json.dumps(manifest));effective['files']['admission/receive.py']=hashlib.sha256(revised).hexdigest()
+    effective['origin_manifest_sha256']=MANIFEST_SHA;effective['public_receiver_version']='1.1'
+    effective['changes'].append('public_reader_v11_inverts_either_client_result_instead_of_possible_noop')
+    return (json.dumps(effective,sort_keys=True,indent=2)+'\n').encode()
 def readers(out,sources):
     manifest=out/'cells/MANIFEST.json';sha=hashlib.sha256(manifest.read_bytes()).hexdigest()
     for optimized,name in ((False,'normal'),(True,'optimized')):
@@ -24,8 +37,10 @@ def main(a):
     if a.verify_only:
         print(json.dumps(dict(status='SOURCE71_VERIFIED',manifest_sha256=MANIFEST_SHA)));return
     if a.read_only:
-        need((out/'source-manifest.json').read_bytes()==(HERE/'source-manifest.json').read_bytes(),'READBACK_SOURCE_PIN')
-        print(json.dumps(readers(out,HERE/'sources'),sort_keys=True));return
+        with tempfile.TemporaryDirectory(prefix='fci-public-offline-') as temp:
+            stage=pathlib.Path(temp);effective=stage_sources(stage,manifest)
+            need((out/'source-manifest.json').read_bytes()==effective,'READBACK_SOURCE_PIN')
+            print(json.dumps(readers(out,stage),sort_keys=True));return
     need(platform.system()=='Linux' and hasattr(os,'getuid') and os.getuid()==0,'DISPOSABLE_LINUX_ROOT_REQUIRED')
     need(a.disposable_linux and not out.exists(),'EXPLICIT_DISPOSABLE_LINUX_AND_FRESH_OUTPUT')
     import pwd
@@ -38,14 +53,14 @@ def main(a):
     need(cryptography.__version__=='50.0.2','PINNED_CRYPTOGRAPHY_50_0_2')
     out.mkdir(parents=True);out.chmod(0o755)
     stage=pathlib.Path(tempfile.mkdtemp(prefix='fci-public-admission-'));stage.chmod(0o755)
-    shutil.copytree(HERE/'sources',stage,dirs_exist_ok=True)
+    effective=stage_sources(stage,manifest)
     for p in stage.rglob('*'):
         p.chmod(0o755 if p.is_dir() else 0o444)
-    (out/'source-manifest.json').write_bytes((HERE/'source-manifest.json').read_bytes())
+    (out/'source-manifest.json').write_bytes(effective);effective_sha=hashlib.sha256(effective).hexdigest()
     subprocess.run([sys.executable,'-I','-B',str(stage/'crash/collect.py'),'--stage',str(stage),
-        '--manifest',str(out/'source-manifest.json'),'--manifest-sha256',MANIFEST_SHA,'--out',str(out/'cells'),'--launch-eight'],check=True)
+        '--manifest',str(out/'source-manifest.json'),'--manifest-sha256',effective_sha,'--out',str(out/'cells'),'--launch-eight'],check=True)
     received=readers(out,stage)
-    record=dict(schema='PUBLIC-NATIVE-ADMISSION-REPRODUCTION/1',status='RECEIVED',manifest_sha256=MANIFEST_SHA,
+    record=dict(schema='PUBLIC-NATIVE-ADMISSION-REPRODUCTION/1.1',status='RECEIVED',origin_manifest_sha256=MANIFEST_SHA,manifest_sha256=effective_sha,
         source_files=len(manifest['files']),python=sys.version,platform=platform.platform(),cryptography=cryptography.__version__,
         stage=str(stage),scope='Fresh fixtures; exact frozen sources; trusted root/OS/owner; no independent audit',result=received)
     (out/'REPRODUCTION.json').write_text(json.dumps(record,sort_keys=True,indent=2)+'\n')
