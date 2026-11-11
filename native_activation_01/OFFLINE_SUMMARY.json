@@ -1,0 +1,77 @@
+{
+  "status": "CI_LOCAL_READERS_IDENTICAL",
+  "files": 75,
+  "source_manifest_sha256": "3b0b94a20210e268911822ba744f709a9a63ca65a755f0a477280c44ddc8780b",
+  "capture_index_sha256": "2ebcdd59e98e738f0e8e3885b7fb04e7045a5c678e63e92c5c970d6c4e920161",
+  "result": {
+    "C_executed": false,
+    "M1": "HOLD",
+    "SR02": "BLOCKED",
+    "activated_C": 4,
+    "activation_evidence_mutations": 64,
+    "activation_grant_authority_holds": 24,
+    "activation_rollbacks": 4,
+    "dry_gate_authorizations": 12,
+    "historical_activation_refusals": 4,
+    "independent_audit": false,
+    "kernel_role_denials": 48,
+    "legacy_reservations_preserved": true,
+    "native_permits_issued": 8,
+    "native_sigkills": 8,
+    "normal_native_service_restart_qualified": false,
+    "real_expiry_cases": 4,
+    "restart_retrievals": 4,
+    "results": [
+      {
+        "activated": true,
+        "cut": "before_commit",
+        "native_permits": 2,
+        "profile": "FCI"
+      },
+      {
+        "activated": false,
+        "cut": "after_commit",
+        "native_permits": 0,
+        "profile": "FCI"
+      },
+      {
+        "activated": true,
+        "cut": "before_commit",
+        "native_permits": 2,
+        "profile": "STANDARD"
+      },
+      {
+        "activated": false,
+        "cut": "after_commit",
+        "native_permits": 0,
+        "profile": "STANDARD"
+      },
+      {
+        "activated": true,
+        "cut": "before_commit",
+        "native_permits": 2,
+        "profile": "FCI"
+      },
+      {
+        "activated": false,
+        "cut": "after_commit",
+        "native_permits": 0,
+        "profile": "FCI"
+      },
+      {
+        "activated": true,
+        "cut": "before_commit",
+        "native_permits": 2,
+        "profile": "STANDARD"
+      },
+      {
+        "activated": false,
+        "cut": "after_commit",
+        "native_permits": 0,
+        "profile": "STANDARD"
+      }
+    ],
+    "revocation_cases": 4,
+    "status": "C_ACTIVATION_AND_PERMIT_EIGHT_RECEIVED"
+  }
+}
