@@ -1,16 +1,22 @@
 # Recovery after “not found”
 
+## Native activation01 — bounded public reception, 12 November 2026
+
+[Source package and commands](native_activation_01/README.md) · [Received evidence and limits](native_activation_01/RECEPTION.md) · [Successful public CI](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43121546137).
+
+Eight fresh native captures receive four C activations, eight signed native permits and four historical refusals. Expiry, revocation, component restart and dry authorization checks are received in the tested versioned routes. No C effect is executed. Permit consumption/revalidation at the actual native COMMIT, normal native service role C/rearm and arbitrary direct authorization submission remain unqualified. M1 HOLD / SR02 BLOCKED.
+
 ## Native admission01 — public standalone reproduction
 
 [Source package and commands](native_admission_01/README.md) · [Public CI reception and preserved failures](native_admission_01/RECEPTION.md).
 
-Eight fresh native cases receive four C admissions without execution and four historical refusals. The separately versioned offline receiver1.1 fixes a no-op mutation exposed by reversed client replies; the original71 sources remain preserved. Normal native-service restart, C activation/execution and independent external validation remain open.
+Eight fresh native cases receive four C admissions without execution and four historical refusals. The separately versioned offline receiver1.1 fixes a no-op mutation exposed by reversed client replies; the original71 sources remain preserved. This admission campaign precedes the separate activation study above. It does not itself activate or execute C; normal native-service restart and independent external validation remain open.
 
 ## Public bulletin — 10 November 2026
 
 [Couret–Unification — Recherche ouverte](https://couret-recherche-publications.espace-de-tr-5012.chatgpt.site) · [Bulletin and English summary](docs/publication-20261110/bulletin.md) · [Announcement](docs/publication-20261110/COMMUNIQUE.md).
 
-The bulletin distinguishes these public teaching models from a separate internally received C-admission study. C activation and execution remain unqualified; the bulletin does not release the detailed private technical archives or claim independent validation. Mathematical research and MIRAGE have their own scopes.
+Updated 12 November: the bulletin distinguishes teaching models, historical admission results and the separate bounded public activation/permit reception. C execution remains unqualified. Detailed historical private archives stay private; no independent validation is claimed. Mathematical research and MIRAGE have their own scopes.
 
 ## Identity and programme
 
