@@ -3,7 +3,7 @@
   "date": "2026-11-10",
   "author": "Alexandre Couret",
   "language": "fr",
-  "publication_scope": "Public presentation, original internal summary, and separate standalone public reproduction with versioned receiver1.1. Historical private captures remain private.",
+  "publication_scope": "Public research bulletin, historical admission studies and separate bounded C activation/permit qualification. Historical private captures remain private.",
   "FCI": {
     "name": "Formal Conservative Interposition",
     "nature": "Research on execution authorization and recovery after incidents",
@@ -49,6 +49,31 @@
         42903333228,
         42903610004
       ]
+    },
+    "activation_permit_study": {
+      "date": "2026-11-12",
+      "source_url": "https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_activation_01",
+      "ci_url": "https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43121546137",
+      "executed_commit": "5fcd1e0b405603ceea94a3d535372cf248f996c6",
+      "native_captures": 8,
+      "C_activations": 4,
+      "signed_native_permits": 8,
+      "historical_refusals": 4,
+      "real_short_permit_expirations": 4,
+      "revocations": 4,
+      "activation_component_restart_retrievals": 4,
+      "reader_mutations_rejected_per_mode": 64,
+      "CI_local_readers_byte_identical": true,
+      "artifact_sha256": "6e7ecf7ec5d9e10c5e6c10b5f0e3dd859f2da07464db2757c4b134f815d85183",
+      "artifact_bytes": 318758,
+      "source_manifest_files": 75,
+      "source_manifest_sha256": "3b0b94a20210e268911822ba744f709a9a63ca65a755f0a477280c44ddc8780b",
+      "C_executed": false,
+      "permit_consumed_at_native_commit": false,
+      "normal_native_service_restart_qualified": false,
+      "direct_native_authorization_submission_qualified": false,
+      "independent_audit": false,
+      "qualification": "Dry versioned gate only. Native authorization30s differs from wrapper/bridge TTL2/25s. Trusted OS/root/owner, retained authority and no clones assumed. M1 HOLD / SR02 BLOCKED."
     }
   },
   "MIRAGE": {
@@ -74,5 +99,6 @@
     "Publication authorization is not scientific validation.",
     "Documentary reception is not a general FCI guarantee or an economic advantage.",
     "The public teaching models and the internal native study are distinct."
-  ]
+  ],
+  "updated_at": "2026-11-12"
 }

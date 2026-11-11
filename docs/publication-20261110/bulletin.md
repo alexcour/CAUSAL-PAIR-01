@@ -1,5 +1,19 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation du 12 novembre 2026 — activation et permis C reçus
+
+Une [campagne publique distincte](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_activation_01) reçoit quatre activations durables et huit permis natifs signés sur huit nouvelles captures FCI/Standard, avant/après COMMIT B, en Python normal/optimisé. Quatre cas historiques sans C admis refusent l’activation. Les autorisations sont vérifiées à sec : aucun effet C n’est exécuté.
+
+[CI43121546137 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43121546137), source exécutée `5fcd1e0b405603ceea94a3d535372cf248f996c6`. Artefact13900343217 :318758 octets,62 fichiers, SHA256 `6e7ecf7ec5d9e10c5e6c10b5f0e3dd859f2da07464db2757c4b134f815d85183`. Manifeste75 sources : `3b0b94a20210e268911822ba744f709a9a63ca65a755f0a477280c44ddc8780b`. Les deux lecteurs locaux concordent avec les sorties CI archivées ;64 mutations effectivement altérées sont rejetées par mode.
+
+Quatre rollbacks d’activation,48 refus de rôles et24 refus sur grant/autorité dégradés ont été reçus. Le permis court expire réellement ; son renouvellement est refusé. La révocation clôt C et invalide les routes versionnées testées. Quatre redémarrages du composant d’activation retrouvent les mêmes certificats/permis.
+
+Le grant root lie admission, portée, état retenu, autorités, politique/époque, boot et temps. Le permis versionné contient l’autorisation native et le permis issus du pont gelé. Sa durée2/25s est distincte de la fenêtre native30s. Il ne prouve pas la sûreté de soumissions directes arbitraires, ni la consommation/revalidation au véritable COMMIT C. Service natif normal, rôle C et exécution restent NOT_RUN. OS/root/propriétaire fiables et absence de clones sont des hypothèses. **M1 HOLD / SR02 BLOCKED.** [Reçu complet et limites](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_activation_01/RECEPTION.md).
+
+Les sections suivantes conservent l’état daté du 10 novembre, antérieur à cette activation.
+
+---
+
 ## Actualisation — reproduction publique autonome reçue
 
 Une [reproduction publique autonome](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_admission_01) est désormais disponible : sources originales conservées, lecteur versionné1.1, lanceur Linux et commandes. [CI42904156448 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/42904156448), source exécutée `c1b9167573fa849e8c1726d5c5363beacabf6995`. Huit nouveaux cas : quatre admissions sans exécution, quatre refus historiques. Sorties des lecteurs CI/local normal/optimisé identiques.
