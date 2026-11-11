@@ -1,6 +1,6 @@
 # C activation and native permit01 —12 November2026
 
-Status: implementation prepared; fresh native CI reception pending. Parent: the received public native_admission_01 sources and receiver1.1. Native engines and previous policy implementations are preserved; stage modifications and new tables are declared in a new manifest.
+**Received:** [CI43121546137 succeeded](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43121546137) at `5fcd1e0b405603ceea94a3d535372cf248f996c6`. Four activations, eight signed native permits, four historical refusals; CI/local readers identical. See RECEPTION.md. Parent: the received public native_admission_01 sources and receiver1.1. Native engines and previous policy implementations are preserved; stage modifications and new tables are declared in a new manifest.
 
 ## Contract
 
@@ -25,7 +25,7 @@ python3 -I -B native_activation_01/reproduce.py --read-only --out activation-res
 
 The launcher uses a pinned parent file from this repository and needs no private repository or API key. Offline re-reading requires the sources and copied result directory, not root. The original source directory remains untouched.
 
-## Planned reception
+## Received qualification
 
 Eight fresh native SIGKILL cases, FCI/Standard × pre/post COMMIT × normal/optimized. Four activations, eight real signed native permits (long/short), four historical refusals, four activation rollbacks,48 kernel-role denials,24 activation grant/authority holds, real short-permit expiry and refusal to renew it, revoked-permit/issue/reactivation refusals, same certificate/permit across activation-component restart, and64 actual evidence alterations rejected per reader mode. Earlier readers validate their separate earlier snapshots, not the final activation state.
 
