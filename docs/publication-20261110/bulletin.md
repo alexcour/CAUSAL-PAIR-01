@@ -1,5 +1,21 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation du 12 novembre 2026 — exécution native C, composition 2 reçue
+
+[Sources et commandes](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_execution_01) · [Reçu complet](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_execution_01/RECEPTION.md) · [CI43292958500 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43292958500), source exécutée `ca05c516877379d588e6af6bcc271d28ec68195e`.
+
+Les56 contrôles de base passent :12 effets C avec consommation durable du permis,4 récupérations après COMMIT et réponse perdue,4 refus FCI attestés par rollback vérifié,56 coupures B héritées et12 coupures C. Les21 tests de contrat passent dans chaque mode ;298 mutations de preuve réellement altérées sont rejetées par lecteur normal/optimisé. Les relectures locales correspondent octet pour octet aux deux sorties CI archivées. Les modes sont des répétitions, pas des audits indépendants.
+
+La composition diffère l’écriture applicative jusqu’après les derniers contrôles natifs et une clôture DONE/PASS authentifiée. Elle supprime ainsi la divergence observée après COMMIT tardif. Pour deux refus précis de permis, une sortie typée avant l’appel COMMIT permet un rollback explicite, une comparaison complète à la préimage SQL via une autre connexion en lecture seule, puis la conservation d’un reçu signé avant le refus exact. Les issues natives UNKNOWN retournées par les autres chemins ne sont pas réécrites.
+
+Artefact13979046352 :3743671 octets,433 fichiers ; SHA256 `3ffa2f423c5a929ff5daa4b8a2f42dae5d54444e86ad8d2e74e233a1a18862de`. Manifeste80 sources `3b7e067deb2849af9c2fc73cacd91b60166ea84153b006f892f371680501d1d4` ;37 fichiers natifs gelés inchangés. Le lot précédent PR5 demeure en échec50/56 avec ses propres sources et artefacts.
+
+**Limite conservée : quatre libérations supervisées après échéance produisent encore un COMMIT tardif, cette fois avec histoire native cohérente.** Cela n’établit ni validité au point physique de COMMIT, ni borne de validation, ni clôture C004. OS/root/propriétaire fiables, autorités retenues, absence de clones et témoins de réarmement de fixture demeurent des hypothèses. Pas de garantie générale de non-contournement, de co-restauration sûre, de supériorité ou de qualification industrielle. **M1 HOLD / SR02 BLOCKED.**
+
+Les actualisations suivantes conservent leurs états historiques antérieurs à cette nouvelle réception.
+
+---
+
 ## Actualisation du 12 novembre 2026 — activation et permis C reçus
 
 Une [campagne publique distincte](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_activation_01) reçoit quatre activations durables et huit permis natifs signés sur huit nouvelles captures FCI/Standard, avant/après COMMIT B, en Python normal/optimisé. Quatre cas historiques sans C admis refusent l’activation. Les autorisations sont vérifiées à sec : aucun effet C n’est exécuté.
