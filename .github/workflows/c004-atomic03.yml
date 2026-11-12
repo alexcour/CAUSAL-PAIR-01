@@ -1,0 +1,28 @@
+name: C004 atomic sink specification and finite graph
+on:
+  pull_request:
+    branches: [main]
+    paths: ['c004_atomic_sink_03/**', '.github/workflows/c004-atomic03.yml']
+  push:
+    branches: [main]
+    paths: ['c004_atomic_sink_03/**', '.github/workflows/c004-atomic03.yml']
+permissions: {contents: read}
+jobs:
+  explore:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env: {PYTHONDONTWRITEBYTECODE: '1'}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', persist-credentials: false}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with: {python-version: '3.12'}
+      - name: Receive abstract graphs without qualifying physical C004
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          trap 'mkdir -p atomic-sink-results; git rev-parse HEAD > atomic-sink-results/EXECUTED_COMMIT.txt; python --version > atomic-sink-results/ENVIRONMENT.txt; uname -a >> atomic-sink-results/ENVIRONMENT.txt' EXIT
+          python -I -B c004_atomic_sink_03/reproduce.py --out atomic-sink-results
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with: {name: 'c004-atomic03-${{ github.run_id }}', path: atomic-sink-results/, retention-days: 90}
