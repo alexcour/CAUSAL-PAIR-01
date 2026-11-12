@@ -4,6 +4,7 @@ Actual check_C and Endpoint.dispatch are exercised with a small SQLite fixture.
 Endpoint is extracted with AST to avoid executing its root/UDS launcher.
 """
 import ast,copy,importlib.util,json,os,sqlite3,sys,unittest
+from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -94,6 +95,20 @@ class Contracts(unittest.TestCase):
         self.assertEqual(self.b.check_failures[-1]['stage'],'precheck')
 
 class ReadGrantContracts(unittest.TestCase):
+    def test_history_result_uses_wire_JSON_types(self):
+        key=Key.generate();a=dict(uid=62026,rid='C',key=dict(scope='C',deployment='fixture',sink='STANDARD',operation_id='business-C'),h='h')
+        request={'native':'request'};value={'fixture':'result'}
+        permit=h.signed(key,ex.PERMIT,dict(allocation=a,request_digest=q.digest(request),not_before=100,not_after=125))
+        with sqlite3.connect(':memory:') as db:
+            db.executescript('CREATE TABLE c_permit_consumptions(challenge,permit_digest,rid,result_digest,checked_tick);CREATE TABLE c_execution_permits(challenge,envelope,request);')
+            db.execute('INSERT INTO c_execution_permits VALUES(?,?,?)',('c',h.canonical(permit).decode(),h.canonical(request).decode()))
+            db.execute('INSERT INTO c_permit_consumptions VALUES(?,?,?,?,?)',('c',q.digest(permit),'C',q.digest(value),110))
+            b=object.__new__(ex.Execution);b.allocation=a;b.sink_key=key;b.profile='STANDARD';b.require=need
+            b.open_control=lambda:nullcontext(db);b.business=lambda *args:(None,None,h.canonical(value).decode());b.read_result=lambda *args:value
+            b.engine=SimpleNamespace(inspect=lambda rid:dict(effect_status='COMMITTED_PROVEN'))
+            result=b.history_C(62026)
+            self.assertIsInstance(result['consumption'],list)
+            self.assertEqual(json.loads(h.canonical(result)),result)
     def fixture(self):
         db=sqlite3.connect(':memory:',isolation_level=None)
         db.executescript('CREATE TABLE c_execution_permits(challenge TEXT PRIMARY KEY,envelope,request);CREATE TABLE sk_readers(k,uid,PRIMARY KEY(k,uid));')

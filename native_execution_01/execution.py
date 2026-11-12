@@ -158,4 +158,4 @@ class Execution(NativeBridge):
         result=self.read_result(a['key'],a['h'],uid)
         native=self.engine.inspect_operation(a['rid']) if self.profile=='FCI' else self.engine.inspect(a['rid'])
         self.require(native['effect_status']=='COMMITTED_PROVEN','NATIVE_C_HISTORY')
-        return dict(status='C_RESULT_RETRIEVED',result=result,native=native,new_effect=False,consumption=record)
+        return dict(status='C_RESULT_RETRIEVED',result=result,native=native,new_effect=False,consumption=list(record))
