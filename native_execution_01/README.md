@@ -1,40 +1,34 @@
-# C native execution01 — 12 November 2026
+# Native C execution — received composition2, 12 November 2026
 
-**Qualification pending.** Separate research composition after received C activation. No received result claimed until native CI and independent offline reception succeed.
+**Received:** [CI43292958500](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43292958500) at `ca05c516877379d588e6af6bcc271d28ec68195e`. All56 baseline cells pass;298 evidence mutations are rejected per reader mode. Local normal/-O readers match both archived CI outputs. See [full receipt and limits](RECEPTION.md). Global M1 HOLD / SR02 BLOCKED remain.
 
-The launcher pins the public activation parent, which pins the standalone admission parent and37 frozen native sources. It adds two empty tables before any B call. Seven fresh scenarios repeat each of the eight parent cells: the original success, before/after-C-COMMIT SIGKILL, expiry after precheck and revocation after precheck, plus expiry during a pause after final transaction sampling followed by release or SIGKILL. Fifty-six parent B SIGKILLs and twelve additional C cuts are planned. The temporal release case deliberately documents a possible COMMIT after deadline; it does not satisfy a commit-before-expiry contract.
+## Contract
 
-Root signs explicit STARTUP, REARM and EXECUTE grants binding retained state/authority identity, waited previous owner, C activation, scope, policy, boot and time. The normal NativeBridge constructor invokes the real SqlService/Standard constructor, including lifetime lock and STARTUP. The C role is explicitly installed by the adapter; Standard keeps its installed configuration and authenticates the actual signed C UID through the versioned facade. The inherited safe_rearm helper uses synthetic fixture witnesses, not independent repair evidence. No direct recovery/poison/epoch resets are introduced.
+Root STARTUP/REARM/EXECUTE grants bind retained authority identities and state, waited prior owner, C activation, scope, boot, time and a policy2 digest of execution.py plus native_finalization.py. The real SqlService/Standard constructors run, including lifetime locks and STARTUP. C uses an explicit adapter role extension. Supervised rearm uses synthetic fixture witnesses. Native37 source files remain unchanged; the80-file staged closure declares all composition changes.
 
-After rearm, a fresh issuer authorization binds the new native epoch. A distinct consumable wrapper binds the fresh root grant, owner PID, activation and request. The real native effect transaction stages the business result and inserts the unique permit consumption. Both roll back or commit together. The wrapper and current control are checked after SQL staging; this is the final sampled authorization point, **not a bound on elapsed time from sampling through actual COMMIT**.
+Fresh native authorization follows the post-rearm native epoch. Permit storage atomically grants only C's exact business-key read right. FCI defers application SQL until the existing after_commit_fence hook confirms DONE and authenticated COMMIT_FENCE_PASS after all frozen finalizers. Native SQL effect, signed business result and unique permit consumption then stage in the same real effect transaction. STANDARD retains its original native transaction hooks.
 
-On restart, a fresh root STARTUP grant requires the killed previous owner to have been waited for. The old execution grant remains bound to the previous PID and cannot reauthorize execution. Historical result retrieval verifies the signed native/business history and durable consumption without producing a new effect. An absent result remains HOLD, not permission to retry. B reservations are retained; native rearm may explicitly quarantine a native phase and advance epochs.
+Only allowlisted C expiry/revocation failures use a typed PolicyStop before the vendor COMMIT call. The owning composition rolls back and checks every main-database table against the transaction-begin preimage through a separate read-only connection. A scoped signed abort receipt commits in c_policy_aborts before an exact refusal is acknowledged. Incomplete proof leaves the call unresolved. A returned native UNKNOWN is never relabelled as nonexecution.
 
-## Run
+After SIGKILL, the supervisor waits before a new STARTUP grant. An old owner-bound execution permit cannot reauthorize a new owner. Historical retrieval verifies durable consumption, signed native/business history and the C read grant without a new effect. Missing results remain HOLD. Predecessor reservations and provenance remain retained.
 
-Disposable Linux VM only, root supervisor, Python3.12, pidfd, cryptography50.0.2; numeric UIDs62021–62026 must be unassigned. No production systems. Fixture runtime directories contain private test keys and must never be published. CI uploads only result captures and manifests.
+## Reproduce
+
+Disposable Linux VM only, root supervisor, Python3.12, pidfd and cryptography50.0.2. UIDs62021–62026 must be unassigned. Runtime directories contain private fixture keys and must not be published. CI uploads result captures and manifests only.
 
 ```sh
 python3 -m pip install cryptography==50.0.2
+python3 -I -B native_execution_01/test_contracts.py
+python3 -O -I -B native_execution_01/test_contracts.py
 python3 -I -B native_execution_01/reproduce.py --verify-only
 sudo -n "$(command -v python3)" -I -B native_execution_01/reproduce.py --disposable-linux --out "$PWD/execution-results"
 python3 -I -B native_execution_01/reproduce.py --read-only --out execution-results
 ```
 
-Offline reader imports the prior evidence readers and signature primitives, never the execution/native implementations. It verifies the earlier admission evidence in seven distinct eight-cell groups, then signed grants/requests/results, kernel peers, isolated negative probes, snapshots, COMMIT cuts, effect/consumption equality, preservation of predecessor rights and evidence mutations. Both normal/-O readers run even if one fails. A per-cell DIAGNOSTIC_ONLY report is emitted before any qualification claim; baseline failures still fail the job. Normal/-O are repetitions, not independent external audits.
+Seven scenarios repeat each eight-cell parent group: success, before/after-C-COMMIT SIGKILL, expiry/revocation after precheck, expiry during a post-finalization pause followed by release or SIGKILL. The lot has56 parent B kills,12 C cuts,40 C normal owner startups,28 fixture rearms,12 C effects and4 durable FCI policy-abort receipts. The21 contract tests run in each Python mode. The distinct offline reader imports neither this composition nor the native engines.
 
-The 12 local contract tests run in each Python mode before native collection. They exercise actual wrapper checks and the facade dispatch method with an SQLite fixture, not a real native engine or UDS owner. Native qualification remains a separate CI obligation.
+## Limits and historical failures
 
-## Preserved failure and targeted correction
+Four supervised releases deliberately COMMIT after the wrapper deadline, with coherent native histories. The final sampled check establishes neither validity at the physical COMMIT instant nor bounded commit latency. C004 remains open. Trusted OS/root/single owner, retained authority and no clones are assumptions. One business key per fixture; no co-restore/hostile-owner guarantee, arbitrary direct-route mediation, independent audit, production qualification or general FCI superiority.
 
-Run [43124669096](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43124669096), commit ff42f6c47c854586b603205c104108312b6ba75c, remains FAILURE. Artifact 13903056383 (SHA-256 4a106118dccb810d843891914883d4f718bd05adc49edd406c8805fdb6eee0d8) contains SIGNATURE refusals in all 20 activated-C cells; receive.py required SIGNATURE_INVALID. The frozen handoff verifier already wraps InvalidSignature in Refused('SIGNATURE'). The new facade now maps exactly that code to SIGNATURE_INVALID; every other Refused propagates unchanged. No original evidence is rewritten.
-
-The same artifact also contains four FCI HOLD_NATIVE/OUTCOME_UNKNOWN responses for expiry/revocation after precheck. The exact refusal requirements C_PERMIT_EXPIRED/C_REVOKED remain enforced. Diagnostic instrumentation records the first wrapper failure stage and propagates its original exception; it never converts an unknown native outcome into a proven refusal. No new qualification is claimed in advance of CI.
-
-## Targeted C read-right repair
-
-A separate policy revision atomically grants UID62026 result-reading for the exact business key when its fresh execution permit is stored. See [repair contract](READ_RIGHTS_REPAIR_20261112.md). Existing FCI exact-refusal obligations remain unchanged; no qualification is claimed from this repair alone.
-
-## Limits
-
-Trusted OS/root/single owner, retained authority and no live clones remain assumptions. New versioned adapter and root transition policy; no general mediation of arbitrary direct native calls, no hostile-owner protection, no co-restore safety or industrial time bound. One business key per fixture. Normal constructors and explicit native C execution do not establish production readiness, global NoBypass or general superiority. M1 HOLD / SR02 BLOCKED.
+[PR5 read-repair reception](RECEPTION_READ_REPAIR_20261112.md) remains50/56 failed, including4 late UNKNOWNs and2 inconsistent native histories. [Revision1](REVISION_20261112.md), [read-right repair](READ_RIGHTS_REPAIR_20261112.md) and [finalization contract](FINALIZATION_REPAIR_20261112.md) preserve the explicit changes and earlier failures. Old captures retain their sources and hashes.

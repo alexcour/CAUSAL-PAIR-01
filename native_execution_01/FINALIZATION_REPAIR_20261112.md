@@ -1,6 +1,6 @@
 # FCI finalization and exact pre-COMMIT policy refusals — revision2
 
-**Qualification pending native CI.** This revision starts from PR5/dc40db6368ec234a4dfb3cf85b1212b66f0b348c. Its failed56-cell lot43289235948 remains unchanged:50 baseline passes,4 late policy UNKNOWNs and2 inconsistent late native histories. Earlier captures are not reinterpreted with these sources.
+**Received in native CI43292958500 at ca05c516877379d588e6af6bcc271d28ec68195e;56/56 baseline and298 mutations per mode. See RECEPTION.md.** This revision starts from PR5/dc40db6368ec234a4dfb3cf85b1212b66f0b348c. Its failed56-cell lot43289235948 remains unchanged:50 baseline passes,4 late policy UNKNOWNs and2 inconsistent late native histories. Earlier captures are not reinterpreted with these sources.
 
 ## Causes and explicit composition change
 

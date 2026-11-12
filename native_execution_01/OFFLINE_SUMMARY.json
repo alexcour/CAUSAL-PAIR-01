@@ -1,0 +1,370 @@
+{
+  "status": "C_NATIVE_EXECUTION_56_RECEIVED",
+  "executed_commit": "ca05c516877379d588e6af6bcc271d28ec68195e",
+  "source_files": 80,
+  "source_manifest_sha256": "3b7e067deb2849af9c2fc73cacd91b60166ea84153b006f892f371680501d1d4",
+  "capture_index_sha256": "41e2c3f3dc77ad277e1bbfb12ac862b668169ee845aa2f0ebc371cfc136affe0",
+  "CI_local_normal_optimized_readers_byte_identical": true,
+  "baseline_pass": 56,
+  "baseline_fail": 0,
+  "result": {
+    "C_commit_sigkills": 12,
+    "C_effects": 12,
+    "M1": "HOLD",
+    "SR02": "BLOCKED",
+    "evidence_mutations_rejected_per_mode": 298,
+    "expired_after_precheck_refusals": 4,
+    "historical_no_C_refusals": 28,
+    "independent_audit": false,
+    "late_commit_limit_observations": 4,
+    "late_precommit_rollback_holds": 4,
+    "normal_native_C_owners": 40,
+    "parent_B_sigkills": 56,
+    "post_commit_lost_reply_recoveries": 4,
+    "pre_commit_rollback_holds": 4,
+    "results": [
+      {
+        "C_effect": true,
+        "case": "success",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": true,
+        "case": "after_commit",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": true,
+        "case": "expired_before_commit",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "success",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "after_commit",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": true,
+        "case": "success",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": true,
+        "case": "after_commit",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": true,
+        "case": "expired_before_commit",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "success",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "after_commit",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": true,
+        "case": "success",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": true,
+        "case": "after_commit",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": true,
+        "case": "expired_before_commit",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": false,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "success",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "after_commit",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": true,
+        "profile": "FCI"
+      },
+      {
+        "C_effect": true,
+        "case": "success",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": true,
+        "case": "after_commit",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": true,
+        "case": "expired_before_commit",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": false,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "success",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "before_commit",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "after_commit",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_after_precheck",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "revoked_after_precheck",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit",
+        "historical": true,
+        "profile": "STANDARD"
+      },
+      {
+        "C_effect": false,
+        "case": "expired_before_commit_kill",
+        "historical": true,
+        "profile": "STANDARD"
+      }
+    ],
+    "revoked_after_precheck_refusals": 4,
+    "scope": "Trusted root/OS/owner, retained stores, no clones; final clock sampled at staging, no bound through COMMIT; normal constructors with explicit C role adapter and fixture rearm",
+    "status": "C_NATIVE_EXECUTION_56_RECEIVED",
+    "successful_no_cut_cells": 4,
+    "supervised_fixture_rearms": 28,
+    "verified_typed_FCI_aborts": 4
+  }
+}

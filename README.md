@@ -1,5 +1,12 @@
 # Recovery after “not found”
 
+## Native C execution — received composition2, 12 November 2026
+
+[Commands and sources](native_execution_01/README.md) · [Received evidence and limits](native_execution_01/RECEPTION.md) · [Public native CI](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43292958500).
+
+All56 baseline cells pass and298 evidence mutations are rejected per reader mode. The lot includes12 C effects with durable permit consumption,4 lost-response result recoveries and4 verified FCI policy-abort receipts. A versioned composition places application SQL after all frozen native finalizers;37 native source files remain unchanged. Four deliberate late releases still COMMIT after deadline: this is a limit observation, not a physical COMMIT deadline guarantee. Trusted root/OS/owner, retained stores and no clones; M1 HOLD / SR02 BLOCKED. Earlier activation-only and failed execution lots remain documented below and in the receipt.
+
+
 ## Native activation01 — bounded public reception, 12 November 2026
 
 [Source package and commands](native_activation_01/README.md) · [Received evidence and limits](native_activation_01/RECEPTION.md) · [Successful public CI](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43121546137).
@@ -16,7 +23,7 @@ Eight fresh native cases receive four C admissions without execution and four hi
 
 [Couret–Unification — Recherche ouverte](https://couret-recherche-publications.espace-de-tr-5012.chatgpt.site) · [Bulletin and English summary](docs/publication-20261110/bulletin.md) · [Announcement](docs/publication-20261110/COMMUNIQUE.md).
 
-Updated 12 November: the bulletin distinguishes teaching models, historical admission results and the separate bounded public activation/permit reception. C execution remains unqualified. Detailed historical private archives stay private; no independent validation is claimed. Mathematical research and MIRAGE have their own scopes.
+Updated 12 November: the bulletin distinguishes teaching models, historical admission results and the separate bounded public activation/permit reception. C execution is received in the bounded composition2 fixture campaign; physical COMMIT-deadline validity and production qualification remain open. Detailed historical private archives stay private; no independent validation is claimed. Mathematical research and MIRAGE have their own scopes.
 
 ## Identity and programme
 
