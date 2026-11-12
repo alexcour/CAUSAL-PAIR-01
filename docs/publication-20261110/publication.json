@@ -116,6 +116,34 @@
         "No live clones",
         "Synthetic fixture rearm witnesses"
       ]
+    },
+    "C004_contract_discriminator": {
+      "C004_closed": false,
+      "M1": "HOLD",
+      "SR02": "BLOCKED",
+      "fixture_cells": 24,
+      "fixture_mutations_rejected_per_reader_mode": 58,
+      "independence": "Distinct execution environments and separate readers; same author, not an external audit.",
+      "native_engines_modified": false,
+      "native_new_execution": false,
+      "native_witness_mutations_rejected_per_reader_mode": 24,
+      "physical_COMMIT_deadline_contract": "COUNTEREXAMPLES_RECEIVED",
+      "pinned_native_late_commit_witnesses": 4,
+      "pinned_native_paired_kill_rollbacks": 4,
+      "readers_normal_optimized_byte_identical": true,
+      "source_manifest_sha256": "31ef24272cb33b76e1df4b5944ff5bb43cd177582c21a67f2d7c56450f36eea6",
+      "status": "C004_DISCRIMINATOR_AND_COUNTEREXAMPLES_RECEIVED",
+      "synthetic_late_commit_counterexamples": 6,
+      "date": "2026-11-12",
+      "ci_url": "https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43304723750",
+      "source_url": "https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/c004_commit_contract_01",
+      "receipt_url": "https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_contract_01/RECEPTION.md",
+      "executed_commit": "6914d73ca6b5745a3f15002e6f87e1861551aa1e",
+      "artifact_id": 13983446644,
+      "artifact_bytes": 63750,
+      "artifact_sha256": "80818d0ece5259faf08ebb6211534d23f9a4c8eb48b77d9b15f7b9a2d3a4c593",
+      "cell_count_scope": "per environment; Windows and Linux; same author",
+      "independent_audit": false
     }
   },
   "MIRAGE": {

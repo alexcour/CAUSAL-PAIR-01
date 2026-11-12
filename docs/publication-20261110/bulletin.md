@@ -1,5 +1,17 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation du 12 novembre 2026 — C004 : contrat et contre-exemples reçus
+
+[Contrat temporel](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_contract_01/CONTRACT.md) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_contract_01/RECEPTION.md) · [CI43304723750 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43304723750).
+
+Le contrat distingue autorisation au dernier échantillon, révocation effectivement commise et validité au COMMIT effectif. Un test SQLite synthétique reçoit24 cas sous Windows et24 sous Linux : six contre-exemples au COMMIT tardif par environnement, deux refus d’expiration à la préparation, huit cas d’ordre de révocation et quatre rollbacks après arrêt du processus.58 altérations synthétiques sont rejetées par mode de lecture. Les résultats JSON normalisés concordent entre environnements ; il ne s’agit pas d’un audit extérieur.
+
+Quatre témoins natifs tardifs et quatre rollbacks associés sont relus dans le lot natif déjà reçu ;24 altérations de ces preuves sont rejetées par mode. Aucun moteur natif n’est relancé ou modifié. L’ajout d’un contrôle à la préparation de COMMIT réduit un intervalle mais ne supprime pas la pause possible après son dernier échantillon. La CI initiale échouée et la correction de précision d’horloge locale sont conservées dans l’historique de réception.
+
+**C004 reste ouvert.** Une future solution doit justifier une borne dure jusqu’au COMMIT avec erreur d’horloge, ou une primitive de validation couplée au point d’effet. Les maxima mesurés ne démontrent pas une telle borne. **M1 HOLD / SR02 BLOCKED.** Les chiffres56/12/4 ci-dessous décrivent toujours le lot natif antérieur.
+
+---
+
 ## Actualisation du 12 novembre 2026 — exécution native C, composition 2 reçue
 
 [Sources et commandes](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_execution_01) · [Reçu complet](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_execution_01/RECEPTION.md) · [CI43292958500 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43292958500), source exécutée `ca05c516877379d588e6af6bcc271d28ec68195e`.
