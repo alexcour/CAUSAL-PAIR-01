@@ -31,7 +31,7 @@ jobs:
           set -Eeuo pipefail
           python -m pip install cryptography==50.0.2
           python -I -B c004_commit_contract_01/reproduce.py --verify-only
-          python -I -B c004_commit_contract_01/reproduce.py --native-parent-dir "$PWD/native-parent" --out "$PWD/c004-results"
+          python -I -B c004_commit_contract_01/reproduce.py --native-parent-dir "$PWD/native-parent/native-execution-43292958500" --out "$PWD/c004-results"
           git rev-parse HEAD > c004-results/EXECUTED_COMMIT.txt
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
