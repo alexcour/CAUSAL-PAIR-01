@@ -1,0 +1,51 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "qualified": false,
+  "CI_local_normal_optimized_diagnostics_identical": true,
+  "executed_commit": "0ddbdea6efe0c796fcd4d34452d07330bd848aa1",
+  "source_files": 79,
+  "source_manifest_sha256": "a52e35069f957bcdd283f594c14ff1b0ec79c43f93a0293f72e54d3bbe435138",
+  "capture_index_sha256": "dd8e695670f7665dc813b632111c78f685a401eb751d0338542d134182e3a7f9",
+  "baseline_pass": 50,
+  "baseline_fail": 6,
+  "failures": [
+    {
+      "baseline_checks": "FAIL",
+      "error": "C_EXACT_REFUSAL:C_PERMIT_EXPIRED:observed={\"ok\": true, \"peer\": {\"gid\": 62026, \"pid\": 2556, \"uid\": 62026}, \"result\": {\"receipt\": {\"body\": {\"execution_policy\": \"913c7fa355d9b6e5e056660002873338b01cc9365d755d7fbe06694d85db6a6a\", \"op\": \"execute_C\", \"result_digest\": \"1353779163175a4deaac54d14e37180820437c122f440c241a22c10982165c21\", \"schema\": \"FCI-C-NATIVE-EXECUTION-RPC/1\", \"uid\": 62026}, \"signature\": \"890963e8fcb3b9e4b98aaf1c87897e15d4bf30a9f05a5cf40891a31a32c90144406f2b7c81ad0819f579499c3b86d80891646d635b70224fd0a62537ccc30b02\"}, \"result\": {\"check_failures\": [{\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_EXPIRED\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": true, \"stage\": \"admit\"}], \"execute_entry_calls\": 1, \"final_checks\": [], \"response\": {\"native\": {\"authority_status\": \"RECOVERY_REQUIRED\", \"code\": \"OUTCOME_UNKNOWN\", \"decision\": \"UNKNOWN\", \"effect_status\": \"UNKNOWN\", \"evidence_ref\": null, \"new_effect\": null}, \"status\": \"HOLD_NATIVE\"}}}}",
+      "error_type": "ValueError",
+      "file": "FCI-before_commit-normal-expired_after_precheck/REPORT.json"
+    },
+    {
+      "baseline_checks": "FAIL",
+      "error": "C_EXACT_REFUSAL:C_REVOKED:observed={\"ok\": true, \"peer\": {\"gid\": 62026, \"pid\": 2625, \"uid\": 62026}, \"result\": {\"receipt\": {\"body\": {\"execution_policy\": \"913c7fa355d9b6e5e056660002873338b01cc9365d755d7fbe06694d85db6a6a\", \"op\": \"execute_C\", \"result_digest\": \"d42870901cb2fe489b16490f36d5c5f7e75a30f13ab9eb2a8bc51dc504eca006\", \"schema\": \"FCI-C-NATIVE-EXECUTION-RPC/1\", \"uid\": 62026}, \"signature\": \"9edce62ea06231727d9bc4f4d28f75b079fd19d23b827cc6acfb6fd3e8341479e02a3f031cd9d17114bc059b9c00da47a2ba3ba9eab6e842b6f49d7ffe198a0d\"}, \"result\": {\"check_failures\": [{\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_REVOKED\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": true, \"stage\": \"admit\"}], \"execute_entry_calls\": 1, \"final_checks\": [], \"response\": {\"native\": {\"authority_status\": \"RECOVERY_REQUIRED\", \"code\": \"OUTCOME_UNKNOWN\", \"decision\": \"UNKNOWN\", \"effect_status\": \"UNKNOWN\", \"evidence_ref\": null, \"new_effect\": null}, \"status\": \"HOLD_NATIVE\"}}}}",
+      "error_type": "ValueError",
+      "file": "FCI-before_commit-normal-revoked_after_precheck/REPORT.json"
+    },
+    {
+      "baseline_checks": "FAIL",
+      "error": "C_RPC_SUCCESS:history_C:observed={\"error\": \"INCONSISTENT_CONSUMER_EFFECT\", \"ok\": false, \"peer\": {\"gid\": 62026, \"pid\": 2700, \"uid\": 62026}}",
+      "error_type": "ValueError",
+      "file": "FCI-before_commit-normal-expired_before_commit/REPORT.json"
+    },
+    {
+      "baseline_checks": "FAIL",
+      "error": "C_EXACT_REFUSAL:C_PERMIT_EXPIRED:observed={\"ok\": true, \"peer\": {\"gid\": 62026, \"pid\": 3888, \"uid\": 62026}, \"result\": {\"receipt\": {\"body\": {\"execution_policy\": \"913c7fa355d9b6e5e056660002873338b01cc9365d755d7fbe06694d85db6a6a\", \"op\": \"execute_C\", \"result_digest\": \"1353779163175a4deaac54d14e37180820437c122f440c241a22c10982165c21\", \"schema\": \"FCI-C-NATIVE-EXECUTION-RPC/1\", \"uid\": 62026}, \"signature\": \"18d4d6e864f02320280fd289888d57771f3825285f7e01d1b12ce31c981c4c081cf269f060e9d5b718e90921c5e3842db96713596308344671cda5388c0baf09\"}, \"result\": {\"check_failures\": [{\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_EXPIRED\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": true, \"stage\": \"admit\"}], \"execute_entry_calls\": 1, \"final_checks\": [], \"response\": {\"native\": {\"authority_status\": \"RECOVERY_REQUIRED\", \"code\": \"OUTCOME_UNKNOWN\", \"decision\": \"UNKNOWN\", \"effect_status\": \"UNKNOWN\", \"evidence_ref\": null, \"new_effect\": null}, \"status\": \"HOLD_NATIVE\"}}}}",
+      "error_type": "ValueError",
+      "file": "FCI-before_commit-O-expired_after_precheck/REPORT.json"
+    },
+    {
+      "baseline_checks": "FAIL",
+      "error": "C_EXACT_REFUSAL:C_REVOKED:observed={\"ok\": true, \"peer\": {\"gid\": 62026, \"pid\": 3958, \"uid\": 62026}, \"result\": {\"receipt\": {\"body\": {\"execution_policy\": \"913c7fa355d9b6e5e056660002873338b01cc9365d755d7fbe06694d85db6a6a\", \"op\": \"execute_C\", \"result_digest\": \"d42870901cb2fe489b16490f36d5c5f7e75a30f13ab9eb2a8bc51dc504eca006\", \"schema\": \"FCI-C-NATIVE-EXECUTION-RPC/1\", \"uid\": 62026}, \"signature\": \"91c2274d9af506db30e8ae8743e5281cf358bf0b92c10b7e87e1086bcc734723a6acdfd6cac795907ee680b6794c09a32e0d6a603a68b2580e1a25d1647e890d\"}, \"result\": {\"check_failures\": [{\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_PERMIT_BINDING\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"SIGNATURE\", \"error_type\": \"Refused\", \"in_native_transaction\": false, \"stage\": \"precheck\"}, {\"code\": \"C_REVOKED\", \"error_type\": \"AuthorizationRefused\", \"in_native_transaction\": true, \"stage\": \"admit\"}], \"execute_entry_calls\": 1, \"final_checks\": [], \"response\": {\"native\": {\"authority_status\": \"RECOVERY_REQUIRED\", \"code\": \"OUTCOME_UNKNOWN\", \"decision\": \"UNKNOWN\", \"effect_status\": \"UNKNOWN\", \"evidence_ref\": null, \"new_effect\": null}, \"status\": \"HOLD_NATIVE\"}}}}",
+      "error_type": "ValueError",
+      "file": "FCI-before_commit-O-revoked_after_precheck/REPORT.json"
+    },
+    {
+      "baseline_checks": "FAIL",
+      "error": "C_RPC_SUCCESS:history_C:observed={\"error\": \"INCONSISTENT_CONSUMER_EFFECT\", \"ok\": false, \"peer\": {\"gid\": 62026, \"pid\": 4049, \"uid\": 62026}}",
+      "error_type": "ValueError",
+      "file": "FCI-before_commit-O-expired_before_commit/REPORT.json"
+    }
+  ],
+  "mutations": "NOT_REACHED",
+  "offline_exit": 1
+}
