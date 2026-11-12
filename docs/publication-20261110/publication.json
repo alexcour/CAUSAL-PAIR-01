@@ -230,6 +230,49 @@
       "count_scope": "finite abstract states/edges, not physical transactions; violation categories overlap",
       "atomic_timed_transition": "ASSUMED_SPECIFICATION_NOT_IMPLEMENTED",
       "production_policy_changed": false
+    },
+    "native_execution_explicit_capability02": {
+      "C004_closed": false,
+      "CI_local_reader_bytes_identical": true,
+      "COMMIT_DEADLINE_qualified": false,
+      "C_effects": 12,
+      "M1": "HOLD",
+      "SR02": "BLOCKED",
+      "baseline_fail": 0,
+      "baseline_pass": 56,
+      "capability_mode": "SAMPLED_ADMISSION",
+      "capability_refusals": 196,
+      "capability_refusals_after_existing_result": 12,
+      "evidence_mutations_rejected_per_mode": 410,
+      "frozen_native_sources_unchanged": 37,
+      "late_commit_limit_observations": 4,
+      "local_activity": "Source staging and read-only evidence reception only; CI is the native execution environment.",
+      "local_native_execution": false,
+      "source_manifest_sha256": "7b4ef4206601523bd7d29cbd4271b940862e850b2293f60411d3f38be34ee43d",
+      "staged_sources": 81,
+      "status": "C_NATIVE_CAPABILITY_56_RECEIVED",
+      "date": "2026-11-12",
+      "source_url": "https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_execution_02",
+      "receipt_url": "https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_execution_02/RECEPTION.md",
+      "ci_url": "https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43320160858",
+      "executed_commit": "59a0127ec592a75a7f69a753b52004ee395ef48e",
+      "artifact": {
+        "run": 43320160858,
+        "commit": "59a0127ec592a75a7f69a753b52004ee395ef48e",
+        "id": 13991196111,
+        "bytes": 4911629,
+        "files": 433,
+        "sha256": "ab5b23314b2d13a4ded06a0162f023ed57b2048389e03ae8490c742c977bff73"
+      },
+      "refusal_codes": {
+        "C_COMMIT_DEADLINE_UNQUALIFIED": 84,
+        "C_CAPABILITY_REQUIRED": 56,
+        "C_CAPABILITY_UNKNOWN": 56
+      },
+      "production_service_migrated": false,
+      "independent_audit": false,
+      "TigerBeetle_runtime_executed": false,
+      "next_adapter_candidate": "TigerBeetle pending transfer expiry, separate cluster-event-time synthetic-ledger scope"
     }
   },
   "MIRAGE": {

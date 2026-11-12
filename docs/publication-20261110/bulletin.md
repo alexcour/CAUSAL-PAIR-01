@@ -1,5 +1,17 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation du 12 novembre 2026 — intégration native des capacités temporelles
+
+[API et commandes](https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/native_execution_02) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_execution_02/RECEPTION.md) · [Choix de plateforme](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/native_execution_02/PLATFORM_DECISION.md).
+
+La nouvelle composition exige SAMPLED_ADMISSION explicitement à l’émission et à l’exécution. COMMIT_DEADLINE est refusé avant toute émission de permis ou entrée dans le moteur. Les domaines signés permis/RPC version2 et la politique3 lient la capacité au code de façade ; aucun repli implicite vers un contrat plus faible n’existe.
+
+Le lot natif56/56 reçoit196 refus de capacité sans modification SQL ni nouvelle entrée native :84 demandes COMMIT,56 capacités manquantes et56 inconnues. Douze refus COMMIT surviennent après un résultat déjà conservé. Les12 effets C échantillonnés, quatre reprises après COMMIT avec réponse perdue et quatre refus FCI avec rollback attesté restent reçus.37 tests de contrat passent par mode ;410 preuves altérées sont rejetées par lecteur. Le manifeste81 sources conserve37 fichiers natifs gelés ; la relecture locale de l’archive CI concorde octet pour octet. La capture native est Linux ; Windows effectue les contrats, le staging et la réception, pas une seconde exécution native indépendante.
+
+**C004 reste ouvert.** Quatre COMMITs tardifs restent observés dans le mode échantillonné accepté. Le refus d’une garantie indisponible est une correction du contrat d’API, pas une implémentation de cette garantie ou une migration de production. TigerBeetle est retenu pour le prochain prototype de registre synthétique au temps de cluster ; ce contrat distinct n’est pas assimilé au COMMIT SQL physique. **M1 HOLD / SR02 BLOCKED.** Les lots et modèles précédents conservent leurs périmètres.
+
+---
+
 ## Actualisation du 12 novembre 2026 — C004 : contrat de primitive atomique et reprises
 
 [Contrat](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/CONTRACT.md) · [Conformité d’une future implémentation](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/CONFORMANCE.md) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/RECEPTION.md) · [CI43310332533 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43310332533).
