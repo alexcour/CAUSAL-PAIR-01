@@ -19,9 +19,10 @@ def stage_sources(stage):
     s=change(s,"optimized=opt))","optimized=opt,execution_case=execution_case))")
     s=change(s,"need(len(reports)==8,'EXACT_EIGHT')","need(len(reports)==56,'EXACT_FIFTY_SIX')")
     p.write_bytes(s.encode())
-    for source,target in [('execution.py','execution.py'),('owner.py','owner.py'),('phase.py','execution_phase.py'),('receive.py','receive.py')]:
+    for source,target in [('execution.py','execution.py'),('native_finalization.py','native_finalization.py'),('owner.py','owner.py'),('phase.py','execution_phase.py'),('receive.py','receive.py')]:
         p=stage/'execution'/target;p.parent.mkdir(exist_ok=True);p.write_bytes((HERE/source).read_bytes())
-    m['execution_stage']='C_NATIVE_CONSUMPTION/1';m['execution_parent_launcher_sha256']=PARENT_SHA
+    m['execution_stage']='C_NATIVE_CONSUMPTION/2';m['execution_parent_launcher_sha256']=PARENT_SHA
+    m['changes']+=['versioned_FCI_application_staging_after_all_native_finalizers','typed_policy_stop_before_vendor_COMMIT','separate_readonly_rollback_verification_and_durable_signed_abort']
     m['changes']+=['empty_consumption_schema_before_B','normal_native_constructor_and_fixture_supervised_rearm','fresh_root_transition_grants_native_epoch_bound','one_consumption_in_real_C_effect_transaction','seven_cases_each_parent_cell','exact_signature_error_mapping','isolated_negative_probes','late_commit_limit_observation']
     m['files']={p.relative_to(stage).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in stage.rglob('*') if p.is_file()}
     for p in stage.rglob('*'):p.chmod(0o755 if p.is_dir() else 0o444)

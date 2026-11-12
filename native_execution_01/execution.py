@@ -5,7 +5,8 @@ The clock is sampled at final staging; elapsed time through COMMIT is not bounde
 """
 import hashlib,json,os,sys,time
 from pathlib import Path
-from native_bridge import NativeBridge,RESULT
+from native_bridge import RESULT
+from native_finalization import FinalizedBridge,PolicyStop,RollbackUnresolved,verified_rollback
 from handoff import public,signed,verify,canonical,key_text
 from snapshots import root_snapshot
 import quiescence as q
@@ -13,13 +14,17 @@ import quiescence as q
 GRANT=b'FCI-C-NATIVE-TRANSITION-GRANT/1\0'
 PERMIT=b'FCI-C-NATIVE-CONSUMABLE-PERMIT/1\0'
 RPC=b'FCI-C-NATIVE-EXECUTION-RPC/1\0'
+ABORT=b'FCI-C-VERIFIED-PRECOMMIT-ROLLBACK/1\0'
 
-def policy():return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+def policy():
+    root=Path(__file__).resolve().parent
+    return q.digest(dict(schema='FCI-C-EXECUTION-POLICY/2',files={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in ('execution.py','native_finalization.py')}))
 def provision(path):
     import sqlite3
     with sqlite3.connect(path) as db:
         db.execute('CREATE TABLE c_execution_permits(challenge TEXT PRIMARY KEY,envelope TEXT NOT NULL,request TEXT NOT NULL)')
         db.execute('CREATE TABLE c_permit_consumptions(challenge TEXT PRIMARY KEY,permit_digest TEXT NOT NULL,rid TEXT UNIQUE NOT NULL,result_digest TEXT NOT NULL,checked_tick INTEGER NOT NULL)')
+        db.execute('CREATE TABLE c_policy_aborts(seq INTEGER PRIMARY KEY,envelope TEXT NOT NULL)')
 
 def persist_permit_and_read_grant(db,challenge,wrapper,request,allocation):
     q.need(db.in_transaction and allocation['uid']==62026,'C_PERMIT_READ_GRANT_TRANSACTION')
@@ -39,10 +44,10 @@ def root_grant(path,pin,purpose,runtime,profile,*,exact=False):
     if exact:q.need(q.digest(root_snapshot(runtime,profile)['stores'])==g['state_digest'],'TRANSITION_STATE_CHANGED')
     return env,g
 
-class Execution(NativeBridge):
+class Execution(FinalizedBridge):
     def __init__(self,stage,runtime,profile,issuer,sink,pin,start_grant,live_grant,case,marker):
         self.root_pin=pin;self.live_grant=Path(live_grant);self.case=case;self.marker=Path(marker);self.wrapper=None
-        self.final_checks=[];self.check_failures=[];self.execute_entry_calls=0;self.rearm_calls=0
+        self.final_checks=[];self.check_failures=[];self.native_finalizations=[];self.execute_entry_calls=0;self.rearm_calls=0
         _,g=root_grant(start_grant,pin,'STARTUP',runtime,profile,exact=True)
         w=g['owner_wait'];q.need(w['waited'] is True and w['exit'] in (-15,-9) and w['pid']!=os.getpid(),'PREVIOUS_OWNER_WAITED')
         cert=verify(g['activation'],public(sink),b'FCI-C-ACTIVATION/1\0');self.allocation=cert['allocation'];self.activation=g['activation']
@@ -141,8 +146,29 @@ class Execution(NativeBridge):
                     db.execute('UPDATE sk_control SET epoch=epoch+1 WHERE id=1');db.commit()
         try:
             self.execute_entry_calls+=1;v=super().execute(request,uid,after_precheck=after)
-            return dict(response=v,final_checks=list(self.final_checks),execute_entry_calls=self.execute_entry_calls,check_failures=list(self.check_failures))
+            return dict(response=v,final_checks=list(self.final_checks),execute_entry_calls=self.execute_entry_calls,check_failures=list(self.check_failures),native_finalizations=list(self.native_finalizations))
+        except PolicyStop as stop:
+            # This is a new typed pre-COMMIT path. No native UNKNOWN verdict exists
+            # on this path; every ordinary native UNKNOWN still returns unchanged.
+            try:
+                self.require(self.profile=='FCI' and stop.code in ('C_PERMIT_EXPIRED','C_REVOKED') and stop.stage in ('admit','finish'),'TYPED_POLICY_STOP_ONLY')
+                before,after=verified_rollback(self.engine,self.path)
+                body=dict(schema='FCI-C-VERIFIED-PRECOMMIT-ROLLBACK/1',code=stop.code,stage=stop.stage,uid=uid,rid=self.allocation['rid'],
+                    request_digest=q.digest(request),permit_digest=q.digest(permit),execution_policy=policy(),before=before,
+                    before_digest=q.digest(before),after_digest=q.digest(after),commit_boundary='BEFORE_VENDOR_COMMIT_CALL',
+                    native_verdict=None,rollback_verified=True,readback='SEPARATE_READ_ONLY_CONNECTION',boot_id=permit['body']['boot_id'])
+                receipt=signed(self.sink_key,ABORT,body)
+                with self.open_control() as db:
+                    db.execute('BEGIN IMMEDIATE')
+                    try:db.execute('INSERT INTO c_policy_aborts(envelope) VALUES(?)',(canonical(receipt).decode(),));db.commit()
+                    finally:
+                        if db.in_transaction:db.rollback()
+            except Exception as error:
+                raise RollbackUnresolved('PRECOMMIT_ABORT_NOT_ATTESTED') from error
+            self.require(False,stop.code)
         finally:self.wrapper=None
+    def abort_receipts(self):
+        with self.open_control() as db:return [json.loads(r[0]) for r in db.execute('SELECT envelope FROM c_policy_aborts ORDER BY seq')]
     def history_C(self,uid):
         self.require(uid==62026,'C_ROLE');a=self.allocation
         with self.open_control() as db:

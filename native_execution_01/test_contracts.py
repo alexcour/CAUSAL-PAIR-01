@@ -4,6 +4,7 @@ Actual check_C and Endpoint.dispatch are exercised with a small SQLite fixture.
 Endpoint is extracted with AST to avoid executing its root/UDS launcher.
 """
 import ast,copy,importlib.util,json,os,sqlite3,sys,unittest
+import tempfile
 from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
@@ -17,6 +18,7 @@ sys.path[:0]=[str(HERE),str(FROZEN/'support/fci-same-k-handoff-20261030'),str(FR
 import handoff as h
 import quiescence as q
 import execution as ex
+import native_finalization as nf
 spec=importlib.util.spec_from_file_location('contract_reader',HERE/'receive.py')
 reader=importlib.util.module_from_spec(spec);spec.loader.exec_module(reader)
 
@@ -135,5 +137,72 @@ class ReadGrantContracts(unittest.TestCase):
             for allocation in ({'uid':62026,'key':{}},{'uid':62024,'key':{}}):
                 with self.assertRaises(ValueError):ex.persist_permit_and_read_grant(db,'c',{}, {}, allocation)
             self.assertEqual(db.total_changes,1)
+
+class FinalizationContracts(unittest.TestCase):
+    def test_only_exact_policy_errors_escape_native_unknown_handlers(self):
+        for code in ('C_PERMIT_EXPIRED','C_REVOKED'):
+            with self.assertRaises(nf.PolicyStop) as caught:nf.policy_call(lambda:need(False,code),'admit')
+            self.assertEqual((caught.exception.code,caught.exception.stage),(code,'admit'))
+            self.assertNotIsInstance(caught.exception,Exception)
+            self.assertIsInstance(caught.exception.__cause__,h.Refused)
+        for code in ('TRANSITION_GRANT_EXPIRED','NATIVE_FAILURE','OUTCOME_UNKNOWN'):
+            with self.assertRaises(h.Refused) as caught:nf.policy_call(lambda:need(False,code),'admit')
+            self.assertEqual(str(caught.exception),code)
+    def test_rollback_reads_real_durable_preimage(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'main.db';db=sqlite3.connect(path,isolation_level=None)
+            try:
+                db.execute('CREATE TABLE state(id PRIMARY KEY,value)');db.execute('INSERT INTO state VALUES(1,10)')
+                before=nf.logical_main(db);db.execute('BEGIN IMMEDIATE');db.execute('UPDATE state SET value=20')
+                engine=SimpleNamespace(native_tx_before=before,native_commit_seen=False,consumer=SimpleNamespace(db=db))
+                a,b=nf.verified_rollback(engine,path)
+                self.assertEqual(a,b);self.assertEqual(db.execute('SELECT value FROM state').fetchone(),(10,));self.assertFalse(db.in_transaction)
+            finally:db.close()
+    def test_committed_state_cannot_be_attested_as_precommit_rollback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'main.db';db=sqlite3.connect(path,isolation_level=None)
+            try:
+                db.execute('CREATE TABLE state(value)');before=nf.logical_main(db);db.execute('INSERT INTO state VALUES(20)')
+                engine=SimpleNamespace(native_tx_before=before,native_commit_seen=True,consumer=SimpleNamespace(db=db))
+                with self.assertRaises(ValueError):nf.verified_rollback(engine,path)
+                self.assertEqual(db.execute('SELECT value FROM state').fetchall(),[(20,)])
+            finally:db.close()
+    def test_application_stages_only_after_native_finalizers(self):
+        db=sqlite3.connect(':memory:',isolation_level=None);db.execute('CREATE TABLE writes(kind)');db.execute('BEGIN IMMEDIATE')
+        bridge=SimpleNamespace(active=({},62026),require=need,native_finalizations=[],fault=lambda point:None)
+        bridge.admit=lambda *args:(0,0)
+        bridge.finish=lambda *args:db.execute("INSERT INTO writes VALUES('consumption')")
+        class Frozen:
+            def __init__(self,*args,**kwargs):
+                self.consumer=SimpleNamespace(db=db,_entry=lambda rid:dict(status='DONE'),_fence=lambda rid:dict(decision='COMMIT_FENCE_PASS',checked_at=100))
+                self.active=dict(operation=dict(operation_id='C'))
+            def capture(self,kind,data,raw,service):
+                if kind=='tx_stage':db.execute("INSERT INTO writes VALUES('application')")
+            def record(self,*args,**kwargs):pass
+        class Candidate(nf.FinalizedSqlMixin,Frozen):pass
+        try:
+            service=Candidate(bridge=bridge)
+            service.capture('tx_begin',dict(operation='finish'),{},service)
+            service.capture('tx_stage',dict(operation='finish'),dict(result_new_effect=True),service)
+            self.assertEqual(db.execute('SELECT * FROM writes').fetchall(),[])
+            service.after_finalizers('after_commit_fence')
+            self.assertEqual(db.execute('SELECT * FROM writes').fetchall(),[('application',),('consumption',)])
+            self.assertTrue(db.in_transaction);db.rollback();self.assertEqual(db.execute('SELECT * FROM writes').fetchall(),[])
+        finally:db.close()
+    def test_native_finalizer_denial_never_stages_application(self):
+        db=sqlite3.connect(':memory:',isolation_level=None);db.execute('CREATE TABLE writes(kind)');db.execute('BEGIN IMMEDIATE')
+        bridge=SimpleNamespace(active=({},62026),require=need,native_finalizations=[],fault=lambda point:None,admit=lambda *args:(0,0),finish=lambda *args:None)
+        class Frozen:
+            def __init__(self,*args,**kwargs):
+                self.consumer=SimpleNamespace(db=db,_entry=lambda rid:dict(status='PENDING'),_fence=lambda rid:dict(decision='BLOCK_COMMIT_DEADLINE'))
+                self.active=dict(operation=dict(operation_id='C'))
+            def capture(self,kind,data,raw,service):
+                if kind=='tx_stage':db.execute("INSERT INTO writes VALUES('FORBIDDEN')")
+            def record(self,*args,**kwargs):pass
+        class Candidate(nf.FinalizedSqlMixin,Frozen):pass
+        try:
+            service=Candidate(bridge=bridge);service.capture('tx_stage',dict(operation='finish'),dict(result_new_effect=True),service)
+            service.after_finalizers('after_commit_fence');self.assertEqual(db.execute('SELECT * FROM writes').fetchall(),[])
+        finally:db.close()
 
 if __name__=='__main__':unittest.main(verbosity=2)

@@ -26,7 +26,7 @@ class Endpoint:
             elif op=='issue_C':q.need(set(a)=={'challenge','ttl'},'ISSUE_ARGS');result=b.issue_C(**a)
             elif op=='execute_C':q.need(set(a)=={'permit','request'},'EXECUTE_ARGS');result=b.execute_C(uid=uid,**a)
             elif op=='history_C':q.need(a=={},'HISTORY_ARGS');result=b.history_C(uid)
-            elif op=='diagnostics_C':q.need(a=={},'DIAGNOSTIC_ARGS');result=dict(execute_entry_calls=b.execute_entry_calls,check_failures=list(b.check_failures))
+            elif op=='diagnostics_C':q.need(a=={},'DIAGNOSTIC_ARGS');result=dict(execute_entry_calls=b.execute_entry_calls,check_failures=list(b.check_failures),policy_aborts=b.abort_receipts())
             else:raise Refused('OP')
         except Refused as e:
             if str(e)=='SIGNATURE':

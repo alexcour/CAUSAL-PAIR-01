@@ -19,7 +19,8 @@ def result(c,uid,op,pin,policy):
 def denied(c,uid,code=None):
     w=peer(c,uid);q.need(w['ok'] is False and type(w['error']) is str and (code is None or w['error']==code),'C_EXACT_REFUSAL:'+str(code)+':observed='+json.dumps(w,sort_keys=True))
 def one(r,sources):
-    x=r['execution'];profile=r['profile'];main=q.authority_names(profile)[0];pin=r['trust_anchors']['sink'];policy=sources['files']['execution/execution.py'];case=r['execution_case']
+    x=r['execution'];profile=r['profile'];main=q.authority_names(profile)[0];pin=r['trust_anchors']['sink'];case=r['execution_case']
+    policy=q.digest(dict(schema='FCI-C-EXECUTION-POLICY/2',files={n:sources['files']['execution/'+n] for n in ('execution.py','native_finalization.py')}))
     q.need(r['status']=='CAPTURED' and case in CASES and x['before']['stores']==r['admission_final']['stores'],'C_PHASE_BOUNDARY')
     if r['cut']=='after_commit':
         denied(x['activate'],62022,'ADMITTED_C_REQUIRED');q.need(x['before']['stores']==x['final']['stores'],'C_HISTORICAL_NO_STATE_CHANGE')
@@ -89,6 +90,17 @@ def one(r,sources):
         q.need(x['resume_wait']==dict(pid=x['resume_ready']['pid'],exit=-15,waited=True),'C_RESUME_OWNER_WAIT')
     else:q.need(x['native_wait']==dict(pid=x['native_ready']['pid'],exit=-15,waited=True),'C_OWNER_WAIT')
     has_effect=case in ('success','after_commit','expired_before_commit');stores=x['after_effect']['stores'];effects=q.rows(stores,main,'demo_effects' if profile=='FCI' else 'effects');cons=q.rows(stores,main,'c_permit_consumptions')
+    aborts=q.rows(stores,main,'c_policy_aborts')
+    typed_abort=profile=='FCI' and case in ('expired_after_precheck','revoked_after_precheck')
+    q.need(len(aborts)==int(typed_abort),'EXACT_DURABLE_POLICY_ABORT_COUNT')
+    if typed_abort:
+        env=json.loads(aborts[0]['envelope']);b=q.verify(env,pin,b'FCI-C-VERIFIED-PRECOMMIT-ROLLBACK/1\0')
+        q.need(aborts[0]['seq']==1 and b['schema']=='FCI-C-VERIFIED-PRECOMMIT-ROLLBACK/1' and b['code']==('C_PERMIT_EXPIRED' if case=='expired_after_precheck' else 'C_REVOKED')
+            and b['stage'] in ('admit','finish') and b['uid']==62026 and b['rid']==rid and b['request_digest']==q.digest(request) and b['permit_digest']==q.digest(issue['permit'])
+            and b['execution_policy']==policy and b['boot_id']==p['boot_id'] and b['commit_boundary']=='BEFORE_VENDOR_COMMIT_CALL' and b['native_verdict'] is None
+            and b['rollback_verified'] is True and b['readback']=='SEPARATE_READ_ONLY_CONNECTION' and b['before_digest']==b['after_digest']==q.digest(b['before']),'SIGNED_TYPED_PRECOMMIT_ROLLBACK')
+        projected=copy.deepcopy(stores[main]);projected['c_policy_aborts']['rows']=[]
+        q.need(projected==b['before'],'COMPLETE_ROLLBACK_PREIMAGE_PLUS_ONLY_ABORT_RECORD')
     q.need(len(effects)==len(cons)==int(has_effect),'ATOMIC_NATIVE_EFFECT_AND_CONSUMPTION')
     q.need(all(e['operation_id']==rid for e in effects),'NO_OLD_A_OR_B_EFFECT')
     business=q.rows(stores,main,'sk_business')[0];attempts=q.rows(stores,main,'sk_attempts');c=next(z for z in attempts if z['rid']==rid)
@@ -99,6 +111,7 @@ def one(r,sources):
         last=diagnostic['check_failures'][-1]
         q.need(last['stage'] in ('admit','finish') and last['in_native_transaction'] is True
             and last['code']==('C_PERMIT_EXPIRED' if case=='expired_after_precheck' else 'C_REVOKED'),'REFUSAL_REACHED_NATIVE_TRANSACTION')
+        q.need(diagnostic['policy_aborts']==([env] if typed_abort else []),'SIGNED_DIAGNOSTICS_LINK_DURABLE_ABORT')
     history=get('history',62026,'history_C');again=get('history_repeat',62026,'history_C');q.need(history==again,'IDENTICAL_C_HISTORY')
     if has_effect:
         value=json.loads(business['result']);result_body=q.verify(value,pin,b'SAME-K-NATIVE-BRIDGE-RESULT/1\0');record=cons[0]
@@ -107,6 +120,12 @@ def one(r,sources):
         q.need(c['state']=='APPLIED' and result_body['generation']==3 and result_body['subject_uid']==62026 and result_body['native_operation_id']==rid and result_body['key']==allocation['key'] and result_body['content_hash']==allocation['h'],'SIGNED_C_BUSINESS_RESULT')
         q.need(history['status']=='C_RESULT_RETRIEVED' and history['result']==value and history['native']['effect_status']=='COMMITTED_PROVEN' and history['new_effect'] is False,'NATIVE_C_HISTORY_WITHOUT_REEXECUTION')
         q.need(effects[0]['old_version']==result_body['old_version']==0 and effects[0]['new_version']==result_body['new_version']==1 and effects[0]['value']==result_body['value']==1,'ONE_C_SQL_UPDATE')
+        if profile=='FCI':
+            decode=lambda value:json.loads(bytes.fromhex(value['bytes_hex'])) if type(value) is dict else json.loads(value)
+            inbox=next(z for z in q.rows(stores,main,'inbox') if z['request_id']==rid)
+            fence=next(z for z in q.rows(stores,main,'commit_fence') if z['request_id']==rid)
+            q.need(decode(inbox['payload'])['status']=='DONE' and decode(fence['payload'])['decision']=='COMMIT_FENCE_PASS'
+                and decode(fence['payload'])['ticket_digest']==history['native']['evidence_ref']['ticket_digest'],'NATIVE_DONE_AND_FINAL_FENCE_WITH_C_SQL_EFFECT')
         if case in ('success','expired_before_commit'):
             executed=get('execute',62026,'execute_C')
             q.need(executed['response']['status']=='NEW' and executed['response']['native']['new_effect'] is True,'NORMAL_NATIVE_C_NEW_RESULT')
@@ -114,6 +133,8 @@ def one(r,sources):
                 repeated=get('repeat_execute',62026,'execute_C')
                 q.need(repeated['response']['status']=='RECOVERED' and repeated['response']['result']==value,'IDEMPOTENT_C_RESULT')
             q.need(len(executed['final_checks'])==1 and executed['final_checks'][0]==dict(in_native_transaction=True,tick=record['checked_tick'],deadline=p['not_after'],permit_digest=q.digest(issue['permit'])),'FINAL_CHECK_IN_NATIVE_TXN')
+            if profile=='FCI':q.need(len(executed['native_finalizations'])==1 and executed['native_finalizations'][0]['rid']==rid
+                and executed['native_finalizations'][0]['decision']=='COMMIT_FENCE_PASS' and executed['native_finalizations'][0]['in_native_transaction'] is True,'APPLICATION_STAGE_AFTER_NATIVE_FINALIZERS')
     else:
         q.need(business['result'] is None and history==dict(status='HOLD_NO_C_RESULT',execution_authorized=False),'NO_RESULT_IS_NOT_RETRY_PERMISSION')
         if case=='expired_after_precheck':denied(x['execute'],62026,'C_PERMIT_EXPIRED')
@@ -169,16 +190,22 @@ def run(a):
                 lambda z:z['execution']['bad_signature']['response'].update(ok=True),lambda z:z['execution']['after_effect']['stores'][q.authority_names(z['profile'])[0]]['c_permit_consumptions']['rows'].append(['fake']),
                 lambda z:z['execution']['history']['response']['result']['result'].update(status='FAKE')]
             changes += [lambda z:z['execution']['negative_probes']['bad_signature_bit']['request']['permit'].update(signature='00'*64)]
+            if r['profile']=='FCI' and r['execution_case'] in ('expired_after_precheck','revoked_after_precheck'):
+                changes += [lambda z:z['execution']['after_effect']['stores']['consumer.db']['c_policy_aborts']['rows'].clear(),
+                    lambda z:z['execution']['post_execute_diagnostics']['response']['result']['result']['policy_aborts'][0]['body'].update(rollback_verified=False),
+                    lambda z:z['execution']['post_execute_diagnostics']['response']['result']['result']['policy_aborts'][0]['body'].update(native_verdict='OUTCOME_UNKNOWN')]
+            if r['profile']=='FCI' and r['execution_case'] in ('success','after_commit','expired_before_commit'):
+                changes += [lambda z:z['execution']['after_effect']['stores']['consumer.db']['commit_fence']['rows'].clear()]
         for f in changes:
             bad=copy.deepcopy(r);f(bad);q.need(bad!=r,'MUTATION_ACTUALLY_CHANGES_EVIDENCE')
             try:one(bad,sources)
             except Exception:mutants+=1
             else:raise ValueError('EXECUTION_EVIDENCE_MUTATION_ACCEPTED')
-    q.need(sum(x['C_effect'] for x in results)==12 and sum(x['historical'] for x in results)==28 and mutants==280,'EXACT_C_EXECUTION_COUNTS')
-    q.need(not {'execution','activation','admission','retirement','native_bridge','sql_service','standard','recovery','participant'}&set(sys.modules),'OFFLINE_NO_IMPLEMENTATION_IMPORT')
+    q.need(sum(x['C_effect'] for x in results)==12 and sum(x['historical'] for x in results)==28 and mutants==298,'EXACT_C_EXECUTION_COUNTS')
+    q.need(not {'execution','native_finalization','activation','admission','retirement','native_bridge','sql_service','standard','recovery','participant'}&set(sys.modules),'OFFLINE_NO_IMPLEMENTATION_IMPORT')
     value=dict(status='C_NATIVE_EXECUTION_56_RECEIVED',parent_B_sigkills=56,C_commit_sigkills=12,normal_native_C_owners=40,supervised_fixture_rearms=28,C_effects=12,
         successful_no_cut_cells=4,post_commit_lost_reply_recoveries=4,pre_commit_rollback_holds=4,expired_after_precheck_refusals=4,revoked_after_precheck_refusals=4,
-        historical_no_C_refusals=28,late_commit_limit_observations=4,late_precommit_rollback_holds=4,evidence_mutations_rejected_per_mode=mutants,results=results,M1='HOLD',SR02='BLOCKED',independent_audit=False,
+        historical_no_C_refusals=28,late_commit_limit_observations=4,late_precommit_rollback_holds=4,verified_typed_FCI_aborts=4,evidence_mutations_rejected_per_mode=mutants,results=results,M1='HOLD',SR02='BLOCKED',independent_audit=False,
         scope='Trusted root/OS/owner, retained stores, no clones; final clock sampled at staging, no bound through COMMIT; normal constructors with explicit C role adapter and fixture rearm')
     a.out.write_bytes(q.canonical(value));print(json.dumps({k:v for k,v in value.items() if k!='results'}))
 if __name__=='__main__':
