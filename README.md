@@ -1,5 +1,12 @@
 # Recovery after “not found”
 
+## Native execution02 — explicit temporal capability
+
+[New API and commands](native_execution_02/README.md) · [Received native evidence](native_execution_02/RECEPTION.md) · [Platform decision](native_execution_02/PLATFORM_DECISION.md).
+
+SAMPLED_ADMISSION must be requested explicitly. COMMIT_DEADLINE is unavailable and refused before grant/DB/native entry, including cached-result paths. Signed version2 permits/RPCs and policy3 bind the declared capability. The new56-cell native campaign receives196 isolated capability refusals,12 sampled C effects and410 changed-evidence rejections per reader mode. Four late S-mode commits remain limit observations. C004 open / M1 HOLD / SR02 BLOCKED; this is research integration, not production migration. The prior packages below retain their historical scopes.
+
+
 ## Native C execution — received composition2, 12 November 2026
 
 [Commands and sources](native_execution_01/README.md) · [Received evidence and limits](native_execution_01/RECEPTION.md) · [Public native CI](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43292958500).
