@@ -3,7 +3,8 @@ import copy,hashlib,json,os,selectors,signal,subprocess,time,uuid
 from pathlib import Path
 import quiescence as q
 from activation import GRANT as ACTIVATION_GRANT,policy as activation_policy
-from execution import GRANT,policy
+GRANT=b'FCI-C-NATIVE-TRANSITION-GRANT/1\0'
+def policy():return hashlib.sha256(Path(__file__).with_name('execution.py').read_bytes()).hexdigest()
 
 def put(p,x):p.write_text(json.dumps(x,sort_keys=True,indent=2)+'\n');p.chmod(0o444)
 def phase(a,runtime,work,sd,evidence,row,flags,client,answer,snapshot,context_path,supervisor_key):

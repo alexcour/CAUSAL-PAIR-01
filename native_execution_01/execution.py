@@ -37,7 +37,7 @@ def root_grant(path,pin,purpose,runtime,profile,*,exact=False):
 class Execution(NativeBridge):
     def __init__(self,stage,runtime,profile,issuer,sink,pin,start_grant,live_grant,case,marker):
         self.root_pin=pin;self.live_grant=Path(live_grant);self.case=case;self.marker=Path(marker);self.wrapper=None
-        self.final_checks=[];self.native_calls=0;self.rearm_calls=0
+        self.final_checks=[];self.execute_entry_calls=0;self.rearm_calls=0
         _,g=root_grant(start_grant,pin,'STARTUP',runtime,profile,exact=True)
         w=g['owner_wait'];q.need(w['waited'] is True and w['exit'] in (-15,-9) and w['pid']!=os.getpid(),'PREVIOUS_OWNER_WAITED')
         cert=verify(g['activation'],public(sink),b'FCI-C-ACTIVATION/1\0');self.allocation=cert['allocation'];self.activation=g['activation']
@@ -119,8 +119,8 @@ class Execution(NativeBridge):
                     db.execute("UPDATE c_activations SET status='REVOKED' WHERE rid=?",(self.allocation['rid'],))
                     db.execute('UPDATE sk_control SET epoch=epoch+1 WHERE id=1');db.commit()
         try:
-            self.native_calls+=1;v=super().execute(request,uid,after_precheck=after)
-            return dict(response=v,final_checks=list(self.final_checks),native_calls=self.native_calls)
+            self.execute_entry_calls+=1;v=super().execute(request,uid,after_precheck=after)
+            return dict(response=v,final_checks=list(self.final_checks),execute_entry_calls=self.execute_entry_calls)
         finally:self.wrapper=None
     def history_C(self,uid):
         self.require(uid==62026,'C_ROLE');a=self.allocation
