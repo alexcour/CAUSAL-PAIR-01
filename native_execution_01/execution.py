@@ -21,6 +21,11 @@ def provision(path):
         db.execute('CREATE TABLE c_execution_permits(challenge TEXT PRIMARY KEY,envelope TEXT NOT NULL,request TEXT NOT NULL)')
         db.execute('CREATE TABLE c_permit_consumptions(challenge TEXT PRIMARY KEY,permit_digest TEXT NOT NULL,rid TEXT UNIQUE NOT NULL,result_digest TEXT NOT NULL,checked_tick INTEGER NOT NULL)')
 
+def persist_permit_and_read_grant(db,challenge,wrapper,request,allocation):
+    q.need(db.in_transaction and allocation['uid']==62026,'C_PERMIT_READ_GRANT_TRANSACTION')
+    db.execute('INSERT INTO c_execution_permits VALUES(?,?,?)',(challenge,canonical(wrapper).decode(),canonical(request).decode()))
+    db.execute('INSERT OR IGNORE INTO sk_readers VALUES(?,?)',(key_text(allocation['key']),62026))
+
 def root_grant(path,pin,purpose,runtime,profile,*,exact=False):
     path=Path(path)
     for p in (path,path.parent):
@@ -73,7 +78,7 @@ class Execution(NativeBridge):
             db.execute('BEGIN IMMEDIATE')
             try:
                 self.require(not db.execute('SELECT 1 FROM c_execution_permits').fetchone(),'ONE_EXECUTION_PERMIT')
-                db.execute('INSERT INTO c_execution_permits VALUES(?,?,?)',(challenge,canonical(wrapper).decode(),canonical(request).decode()));db.commit()
+                persist_permit_and_read_grant(db,challenge,wrapper,request,self.allocation);db.commit()
             finally:
                 if db.in_transaction:db.rollback()
         return dict(permit=wrapper,request=request)

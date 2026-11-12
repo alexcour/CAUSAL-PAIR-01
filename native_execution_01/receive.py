@@ -78,6 +78,7 @@ def one(r,sources):
         q.need(marker['pid']==x['native_ready']['pid'] and marker['uid']==62021 and marker['point']=='before_commit'
             and marker['deadline']==p['not_after'] and marker['tick']<p['not_after']<=x['temporal_release_tick'],'TEMPORAL_AFTER_FINAL_SAMPLE')
     expected=copy.deepcopy(x['after_rearm']['stores']);expected[main]['c_execution_permits']['rows']=[['c'*32,q.canonical(issue['permit']).decode(),q.canonical(request).decode()]]
+    expected[main]['sk_readers']['rows'].append([q.canonical(allocation['key']).decode(),62026])
     q.need(x['before_effect']['stores']==expected,'PERMIT_ISSUANCE_ONLY_BEFORE_EFFECT')
     if case in ('before_commit','after_commit','expired_before_commit_kill'):
         q.need(x['native_wait']==dict(pid=x['native_ready']['pid'],exit=-9,waited=True,pidfd_bound=True) and x['kill_marker']==dict(pid=x['native_ready']['pid'],uid=62021,point=('before_commit' if case=='expired_before_commit_kill' else case),**({k:x['temporal_marker'][k] for k in ('tick','deadline')} if case=='expired_before_commit_kill' else {})),'REAL_C_CUT_AND_WAIT')

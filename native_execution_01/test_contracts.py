@@ -93,4 +93,32 @@ class Contracts(unittest.TestCase):
         self.assertEqual(self.b.check_failures[-1]['code'],'C_PERMIT_EXPIRED')
         self.assertEqual(self.b.check_failures[-1]['stage'],'precheck')
 
+class ReadGrantContracts(unittest.TestCase):
+    def fixture(self):
+        db=sqlite3.connect(':memory:',isolation_level=None)
+        db.executescript('CREATE TABLE c_execution_permits(challenge TEXT PRIMARY KEY,envelope,request);CREATE TABLE sk_readers(k,uid,PRIMARY KEY(k,uid));')
+        db.execute('INSERT INTO sk_readers VALUES(?,?)',('predecessor',62024))
+        return db
+    def test_permit_and_C_read_grant_rollback_together(self):
+        with self.fixture() as db:
+            db.execute('BEGIN IMMEDIATE')
+            ex.persist_permit_and_read_grant(db,'c',{'body':'permit'},{'native':'request'},{'uid':62026,'key':{'scope':'C','deployment':'fixture','sink':'FCI','operation_id':'business-C'}})
+            self.assertEqual(db.execute('SELECT uid FROM sk_readers WHERE k=?',(h.key_text({'scope':'C','deployment':'fixture','sink':'FCI','operation_id':'business-C'}),)).fetchall(),[(62026,)])
+            self.assertEqual(db.execute('SELECT count(*) FROM c_execution_permits').fetchone(),(1,))
+            db.rollback()
+            self.assertEqual(db.execute('SELECT * FROM sk_readers').fetchall(),[('predecessor',62024)])
+            self.assertEqual(db.execute('SELECT count(*) FROM c_execution_permits').fetchone(),(0,))
+    def test_read_grant_is_scoped_and_preserves_predecessor(self):
+        with self.fixture() as db:
+            db.execute('BEGIN IMMEDIATE')
+            ex.persist_permit_and_read_grant(db,'c',{'body':'permit'},{'native':'request'},{'uid':62026,'key':{'scope':'C','deployment':'fixture','sink':'FCI','operation_id':'business-C'}})
+            db.commit()
+            self.assertEqual(set(db.execute('SELECT * FROM sk_readers')),{('predecessor',62024),(h.key_text({'scope':'C','deployment':'fixture','sink':'FCI','operation_id':'business-C'}),62026)})
+            self.assertEqual(db.execute('SELECT count(*) FROM c_execution_permits').fetchone(),(1,))
+    def test_grant_requires_real_transaction_and_C(self):
+        with self.fixture() as db:
+            for allocation in ({'uid':62026,'key':{}},{'uid':62024,'key':{}}):
+                with self.assertRaises(ValueError):ex.persist_permit_and_read_grant(db,'c',{}, {}, allocation)
+            self.assertEqual(db.total_changes,1)
+
 if __name__=='__main__':unittest.main(verbosity=2)

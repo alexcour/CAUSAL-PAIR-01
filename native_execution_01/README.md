@@ -31,6 +31,10 @@ Run [43124669096](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/431246
 
 The same artifact also contains four FCI HOLD_NATIVE/OUTCOME_UNKNOWN responses for expiry/revocation after precheck. The exact refusal requirements C_PERMIT_EXPIRED/C_REVOKED remain enforced. Diagnostic instrumentation records the first wrapper failure stage and propagates its original exception; it never converts an unknown native outcome into a proven refusal. No new qualification is claimed in advance of CI.
 
+## Targeted C read-right repair
+
+A separate policy revision atomically grants UID62026 result-reading for the exact business key when its fresh execution permit is stored. See [repair contract](READ_RIGHTS_REPAIR_20261112.md). Existing FCI exact-refusal obligations remain unchanged; no qualification is claimed from this repair alone.
+
 ## Limits
 
 Trusted OS/root/single owner, retained authority and no live clones remain assumptions. New versioned adapter and root transition policy; no general mediation of arbitrary direct native calls, no hostile-owner protection, no co-restore safety or industrial time bound. One business key per fixture. Normal constructors and explicit native C execution do not establish production readiness, global NoBypass or general superiority. M1 HOLD / SR02 BLOCKED.
