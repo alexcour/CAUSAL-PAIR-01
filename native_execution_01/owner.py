@@ -18,7 +18,7 @@ class Endpoint:
     roles={u:u for u in (62022,62023,62024,62026)};handle=Service.handle
     def dispatch(self,r,uid):
         q.need(type(r) is dict and set(r)=={'op','args'} and type(r['args']) is dict,'RPC_SHAPE');op=r['op'];a=r['args']
-        if op in ('execute_C','history_C'):
+        if op in ('execute_C','history_C','diagnostics_C'):
             if uid!=62026:raise Refused('C_ROLE')
         elif uid!=62022:raise Refused('CONTROL_ROLE')
         try:
@@ -26,8 +26,12 @@ class Endpoint:
             elif op=='issue_C':q.need(set(a)=={'challenge','ttl'},'ISSUE_ARGS');result=b.issue_C(**a)
             elif op=='execute_C':q.need(set(a)=={'permit','request'},'EXECUTE_ARGS');result=b.execute_C(uid=uid,**a)
             elif op=='history_C':q.need(a=={},'HISTORY_ARGS');result=b.history_C(uid)
+            elif op=='diagnostics_C':q.need(a=={},'DIAGNOSTIC_ARGS');result=dict(execute_entry_calls=b.execute_entry_calls,check_failures=list(b.check_failures))
             else:raise Refused('OP')
-        except Refused:raise
+        except Refused as e:
+            if str(e)=='SIGNATURE':
+                raise Refused('SIGNATURE_INVALID') from e
+            raise
         except InvalidSignature:raise Refused('SIGNATURE_INVALID')
         except (ValueError,OSError,sqlite3.Error) as e:raise Refused(str(e) if isinstance(e,ValueError) else 'AUTHORITY_UNAVAILABLE')
         except Exception:traceback.print_exc();raise

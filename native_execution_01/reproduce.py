@@ -2,7 +2,7 @@
 import argparse,hashlib,importlib.util,itertools,json,os,pathlib,platform,subprocess,sys,tempfile
 HERE=pathlib.Path(__file__).resolve().parent;PARENT=HERE.parent/'native_activation_01/reproduce.py'
 PARENT_SHA='1d269301df8b322892cc20c93c58b4465a9ea223e7a0acdb89f998cba7fe62d1'
-CASES=('success','before_commit','after_commit','expired_after_precheck','revoked_after_precheck')
+CASES=('success','before_commit','after_commit','expired_after_precheck','revoked_after_precheck','expired_before_commit','expired_before_commit_kill')
 def need(x,why):
     if not x:raise ValueError(why)
 def change(s,a,b):need(s.count(a)==1,'UNIQUE_TRANSFORM:'+a[:50]);return s.replace(a,b)
@@ -13,23 +13,25 @@ def stage_sources(stage):
     p=stage/'task/attribution.py';p.chmod(0o644);s=p.read_text();s=change(s,'            activation.provision(Path(self.path))','            activation.provision(Path(self.path))\n            import execution\n            execution.provision(Path(self.path))');p.write_bytes(s.encode())
     p=stage/'task/actors.py';p.chmod(0o644);s=p.read_text();s=change(s,"    from attribution import augment","    sys.path.insert(0,str(args.native_root.parent/'execution'))\n    from attribution import augment");p.write_bytes(s.encode())
     p=stage/'crash/collect.py';p.chmod(0o644);s=p.read_text();s=change(s,'from activation_phase import phase as activation_phase',"sys.path.insert(0,str(Path(__file__).resolve().parent.parent/'execution'))\nfrom execution_phase import phase as activation_phase\nimport itertools")
-    s=change(s,"      for cut in ('before_commit','after_commit'):","      for cut,execution_case in itertools.product(('before_commit','after_commit'),('success','before_commit','after_commit','expired_after_precheck','revoked_after_precheck')):")
+    s=change(s,"      for cut in ('before_commit','after_commit'):","      for cut,execution_case in itertools.product(('before_commit','after_commit'),('success','before_commit','after_commit','expired_after_precheck','revoked_after_precheck','expired_before_commit','expired_before_commit_kill')):")
     s=change(s,"evidence=a.out/(profile+'-'+cut+('-O' if opt else '-normal'))","evidence=a.out/(profile+'-'+cut+('-O' if opt else '-normal')+'-'+execution_case)")
     s=change(s,"row=dict(profile=profile,cut=cut,optimized=opt,status='INCONCLUSIVE',waits=[])","row=dict(profile=profile,cut=cut,optimized=opt,execution_case=execution_case,status='INCONCLUSIVE',waits=[])")
     s=change(s,"optimized=opt))","optimized=opt,execution_case=execution_case))")
-    s=change(s,"need(len(reports)==8,'EXACT_EIGHT')","need(len(reports)==40,'EXACT_FORTY')")
+    s=change(s,"need(len(reports)==8,'EXACT_EIGHT')","need(len(reports)==56,'EXACT_FIFTY_SIX')")
     p.write_bytes(s.encode())
     for source,target in [('execution.py','execution.py'),('owner.py','owner.py'),('phase.py','execution_phase.py'),('receive.py','receive.py')]:
         p=stage/'execution'/target;p.parent.mkdir(exist_ok=True);p.write_bytes((HERE/source).read_bytes())
     m['execution_stage']='C_NATIVE_CONSUMPTION/1';m['execution_parent_launcher_sha256']=PARENT_SHA
-    m['changes']+=['empty_consumption_schema_before_B','normal_native_constructor_and_fixture_supervised_rearm','fresh_root_transition_grants_native_epoch_bound','one_consumption_in_real_C_effect_transaction','five_cases_each_parent_cell']
+    m['changes']+=['empty_consumption_schema_before_B','normal_native_constructor_and_fixture_supervised_rearm','fresh_root_transition_grants_native_epoch_bound','one_consumption_in_real_C_effect_transaction','seven_cases_each_parent_cell','exact_signature_error_mapping','isolated_negative_probes','late_commit_limit_observation']
     m['files']={p.relative_to(stage).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in stage.rglob('*') if p.is_file()}
     for p in stage.rglob('*'):p.chmod(0o755 if p.is_dir() else 0o444)
     return (json.dumps(m,sort_keys=True,indent=2)+'\n').encode()
 def read(out,stage):
     h=hashlib.sha256((out/'cells/MANIFEST.json').read_bytes()).hexdigest()
+    codes=[]
     for opt,name in [(False,'normal'),(True,'optimized')]:
-        subprocess.run([sys.executable]+(['-O'] if opt else [])+['-I','-B',str(stage/'execution/receive.py'),'--manifest',str(out/'cells/MANIFEST.json'),'--source-manifest',str(out/'source-manifest.json'),'--manifest-sha256',h,'--out',str(out/('execution-reader-'+name+'.json'))],check=True)
+        codes.append(subprocess.run([sys.executable]+(['-O'] if opt else [])+['-I','-B',str(stage/'execution/receive.py'),'--manifest',str(out/'cells/MANIFEST.json'),'--source-manifest',str(out/'source-manifest.json'),'--manifest-sha256',h,'--out',str(out/('execution-reader-'+name+'.json'))],check=False).returncode)
+    need(codes==[0,0],'C_READERS_FAILED_HOLD:'+str(codes))
     need((out/'execution-reader-normal.json').read_bytes()==(out/'execution-reader-optimized.json').read_bytes(),'EXECUTION_READERS_IDENTICAL')
     return json.loads((out/'execution-reader-normal.json').read_bytes())
 def main(a):

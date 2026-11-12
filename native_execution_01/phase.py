@@ -55,19 +55,45 @@ def phase(a,runtime,work,sd,evidence,row,flags,client,answer,snapshot,context_pa
         epoch=q.rows(x['after_rearm']['stores'],main,'d2_meta')[0]['epoch'] if row['profile']=='FCI' else q.rows(x['after_rearm']['stores'],'reference.db','control')[0]['epoch']
         x['execute_grant']=transition('EXECUTE',x['activation_wait'],owner.pid,epoch)
         x['issue_wrong_role']=ask(62026,'issue_C',dict(challenge='c'*32,ttl=25))
-        x['issue']=ask(62022,'issue_C',dict(challenge='c'*32,ttl=2 if row['execution_case']=='expired_after_precheck' else 25))
+        x['issue']=ask(62022,'issue_C',dict(challenge='c'*32,ttl=2 if row['execution_case']=='expired_after_precheck' else (5 if row['execution_case'].startswith('expired_before_commit') else 25)))
         q.need(x['issue']['response']['ok'],'FRESH_NATIVE_C_PERMIT');issued=x['issue']['response']['result']['result']
         x['execute_wrong_roles']=[ask(uid,'execute_C',issued) for uid in (62022,62023,62024,62025)]
-        bad=copy.deepcopy(issued);bad['permit']['body']['allocation']['uid']=62024;x['bad_signature']=ask(62026,'execute_C',bad)
-        bad=copy.deepcopy(issued);bad['request']['native']['operation']['value']+=1;x['bad_request']=ask(62026,'execute_C',bad)
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey as Key
+        fixture_keys=json.loads((runtime/'bridge-private.json').read_text())
+        sink_key=Key.from_private_bytes(bytes.fromhex(fixture_keys['sink']))
+        x['negative_probes']={}
+        def probe(name,bad):
+            before_probe=snapshot(runtime,row['profile'])
+            before_count=ask(62026,'diagnostics_C')
+            call=ask(62026,'execute_C',bad)
+            after_count=ask(62026,'diagnostics_C')
+            x[name]=call
+            x['negative_probes'][name]=dict(request=bad,before=before_probe,after=snapshot(runtime,row['profile']),
+                before_count=before_count,after_count=after_count)
+        bad=copy.deepcopy(issued);bad['permit']['body']['allocation']['uid']=62024;probe('bad_signature',bad)
+        bad=copy.deepcopy(issued);sig=bytearray.fromhex(bad['permit']['signature']);sig[0]^=1;bad['permit']['signature']=sig.hex();probe('bad_signature_bit',bad)
+        bad=copy.deepcopy(issued);bad['permit']['body']['allocation']['uid']=62024
+        bad['permit']=q.signed(sink_key,b'FCI-C-NATIVE-CONSUMABLE-PERMIT/1\0',bad['permit']['body']);probe('bad_signed_binding',bad)
+        bad=copy.deepcopy(issued);bad['request']['native']['operation']['value']+=1;probe('bad_request',bad)
+        bad=copy.deepcopy(issued);bad['permit']=q.signed(Key.generate(),b'FCI-C-NATIVE-CONSUMABLE-PERMIT/1\0',bad['permit']['body']);probe('bad_signer',bad)
+        bad=copy.deepcopy(issued);bad['permit']=q.signed(sink_key,b'WRONG-DOMAIN/1\0',bad['permit']['body']);probe('bad_domain',bad)
         x['before_effect']=snapshot(runtime,row['profile'])
         pending=client(sock,62026,dict(op='execute_C',args=issued))
-        if row['execution_case'] in ('before_commit','after_commit'):
+        if row['execution_case'].startswith('expired_before_commit'):
+            deadline=time.monotonic()+25
+            while not marker.exists():
+                q.need(owner.poll() is None and time.monotonic()<deadline,'C_TEMPORAL_MARKER_TIMEOUT');time.sleep(.01)
+            x['temporal_marker']=json.loads(marker.read_text())
+            while time.monotonic()<issued['permit']['body']['not_after']+.05:
+                q.need(owner.poll() is None and time.monotonic()<deadline,'C_TEMPORAL_WAIT_TIMEOUT');time.sleep(.01)
+            x['temporal_release_tick']=time.monotonic()
+            if row['execution_case']=='expired_before_commit':marker.with_suffix('.release').touch()
+        if row['execution_case'] in ('before_commit','after_commit','expired_before_commit_kill'):
             pidfd=os.pidfd_open(owner.pid,0)
             try:
                 deadline=time.monotonic()+25
                 while not marker.exists():q.need(owner.poll() is None and time.monotonic()<deadline,'C_COMMIT_MARKER_TIMEOUT');time.sleep(.01)
-                x['kill_marker']=json.loads(marker.read_text());q.need(x['kill_marker']==dict(pid=owner.pid,uid=62021,point=row['execution_case']),'C_KILL_BOUNDARY')
+                x['kill_marker']=json.loads(marker.read_text());q.need(x['kill_marker']==dict(pid=owner.pid,uid=62021,point=('before_commit' if row['execution_case']=='expired_before_commit_kill' else row['execution_case']),**({k:x['temporal_marker'][k] for k in ('tick','deadline')} if row['execution_case']=='expired_before_commit_kill' else {})),'C_KILL_BOUNDARY')
                 signal.pidfd_send_signal(pidfd,signal.SIGKILL,None,0);owner.wait(timeout=10);q.need(owner.returncode==-9,'C_REAL_SIGKILL')
                 x['native_wait']=dict(pid=owner.pid,exit=owner.returncode,waited=True,pidfd_bound=True)
             finally:os.close(pidfd)

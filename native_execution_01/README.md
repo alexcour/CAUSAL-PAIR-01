@@ -2,7 +2,7 @@
 
 **Qualification pending.** Separate research composition after received C activation. No received result claimed until native CI and independent offline reception succeed.
 
-The launcher pins the public activation parent, which pins the standalone admission parent and37 frozen native sources. It adds two empty tables before any B call. Five fresh scenarios repeat each of the eight parent cells: success, SIGKILL before C COMMIT, SIGKILL after C COMMIT/lost response, expiry after precheck and revocation after precheck. Forty parent B SIGKILLs; eight additional C cuts if all cells run.
+The launcher pins the public activation parent, which pins the standalone admission parent and37 frozen native sources. It adds two empty tables before any B call. Seven fresh scenarios repeat each of the eight parent cells: the original success, before/after-C-COMMIT SIGKILL, expiry after precheck and revocation after precheck, plus expiry during a pause after final transaction sampling followed by release or SIGKILL. Fifty-six parent B SIGKILLs and twelve additional C cuts are planned. The temporal release case deliberately documents a possible COMMIT after deadline; it does not satisfy a commit-before-expiry contract.
 
 Root signs explicit STARTUP, REARM and EXECUTE grants binding retained state/authority identity, waited previous owner, C activation, scope, policy, boot and time. The normal NativeBridge constructor invokes the real SqlService/Standard constructor, including lifetime lock and STARTUP. The C role is explicitly installed by the adapter; Standard keeps its installed configuration and authenticates the actual signed C UID through the versioned facade. The inherited safe_rearm helper uses synthetic fixture witnesses, not independent repair evidence. No direct recovery/poison/epoch resets are introduced.
 
@@ -21,7 +21,15 @@ sudo -n "$(command -v python3)" -I -B native_execution_01/reproduce.py --disposa
 python3 -I -B native_execution_01/reproduce.py --read-only --out execution-results
 ```
 
-Offline reader imports the prior evidence readers and signature primitives, never the execution/native implementations. It verifies the earlier admission evidence in five distinct eight-cell groups, then signed grants/requests/results, kernel peers, snapshots, COMMIT cuts, effect/consumption equality, preservation of predecessor rights and evidence mutations. Normal/-O are repetitions, not independent external audits.
+Offline reader imports the prior evidence readers and signature primitives, never the execution/native implementations. It verifies the earlier admission evidence in seven distinct eight-cell groups, then signed grants/requests/results, kernel peers, isolated negative probes, snapshots, COMMIT cuts, effect/consumption equality, preservation of predecessor rights and evidence mutations. Both normal/-O readers run even if one fails. A per-cell DIAGNOSTIC_ONLY report is emitted before any qualification claim; baseline failures still fail the job. Normal/-O are repetitions, not independent external audits.
+
+The 12 local contract tests run in each Python mode before native collection. They exercise actual wrapper checks and the facade dispatch method with an SQLite fixture, not a real native engine or UDS owner. Native qualification remains a separate CI obligation.
+
+## Preserved failure and targeted correction
+
+Run [43124669096](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43124669096), commit ff42f6c47c854586b603205c104108312b6ba75c, remains FAILURE. Artifact 13903056383 (SHA-256 4a106118dccb810d843891914883d4f718bd05adc49edd406c8805fdb6eee0d8) contains SIGNATURE refusals in all 20 activated-C cells; receive.py required SIGNATURE_INVALID. The frozen handoff verifier already wraps InvalidSignature in Refused('SIGNATURE'). The new facade now maps exactly that code to SIGNATURE_INVALID; every other Refused propagates unchanged. No original evidence is rewritten.
+
+The same artifact also contains four FCI HOLD_NATIVE/OUTCOME_UNKNOWN responses for expiry/revocation after precheck. The exact refusal requirements C_PERMIT_EXPIRED/C_REVOKED remain enforced. Diagnostic instrumentation records the first wrapper failure stage and propagates its original exception; it never converts an unknown native outcome into a proven refusal. No new qualification is claimed in advance of CI.
 
 ## Limits
 

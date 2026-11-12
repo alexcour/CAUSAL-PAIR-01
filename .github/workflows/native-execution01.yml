@@ -23,6 +23,8 @@ jobs:
         run: |
           set -Eeuo pipefail
           python -m pip install cryptography==50.0.2
+          python -I -B native_execution_01/test_contracts.py
+          python -O -I -B native_execution_01/test_contracts.py
           python -I -B native_execution_01/reproduce.py --verify-only
           git rev-parse HEAD > EXECUTED_COMMIT.txt
           trap 'sudo -n mkdir -p execution-results; sudo -n cp EXECUTED_COMMIT.txt execution-results/EXECUTED_COMMIT.txt' EXIT

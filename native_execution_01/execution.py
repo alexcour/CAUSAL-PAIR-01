@@ -3,7 +3,7 @@
 New research composition. Root/OS/owner, retained stores and no clones are trusted.
 The clock is sampled at final staging; elapsed time through COMMIT is not bounded.
 """
-import hashlib,json,os,time
+import hashlib,json,os,sys,time
 from pathlib import Path
 from native_bridge import NativeBridge,RESULT
 from handoff import public,signed,verify,canonical,key_text
@@ -37,7 +37,7 @@ def root_grant(path,pin,purpose,runtime,profile,*,exact=False):
 class Execution(NativeBridge):
     def __init__(self,stage,runtime,profile,issuer,sink,pin,start_grant,live_grant,case,marker):
         self.root_pin=pin;self.live_grant=Path(live_grant);self.case=case;self.marker=Path(marker);self.wrapper=None
-        self.final_checks=[];self.execute_entry_calls=0;self.rearm_calls=0
+        self.final_checks=[];self.check_failures=[];self.execute_entry_calls=0;self.rearm_calls=0
         _,g=root_grant(start_grant,pin,'STARTUP',runtime,profile,exact=True)
         w=g['owner_wait'];q.need(w['waited'] is True and w['exit'] in (-15,-9) and w['pid']!=os.getpid(),'PREVIOUS_OWNER_WAITED')
         cert=verify(g['activation'],public(sink),b'FCI-C-ACTIVATION/1\0');self.allocation=cert['allocation'];self.activation=g['activation']
@@ -77,7 +77,15 @@ class Execution(NativeBridge):
             finally:
                 if db.in_transaction:db.rollback()
         return dict(permit=wrapper,request=request)
-    def check_C(self,db,permit,request,uid):
+    def check_C(self,db,permit,request,uid,stage='precheck'):
+        try:return self._check_C(db,permit,request,uid)
+        except Exception as e:
+            # Fixture diagnostic only: preserve the original exception and native verdict.
+            event=dict(stage=stage,error_type=type(e).__name__,code=str(e),in_native_transaction=db.in_transaction)
+            self.check_failures.append(event)
+            print(json.dumps(dict(C_check_failure=event)),file=sys.stderr,flush=True)
+            raise
+    def _check_C(self,db,permit,request,uid):
         self.require(uid==62026,'C_ROLE');env,g=self.grant('EXECUTE')
         b=verify(permit,public(self.sink_key),PERMIT)
         self.require(b['schema']=='FCI-C-NATIVE-CONSUMABLE-PERMIT/1' and b['grant_digest']==q.digest(env) and b['activation_digest']==q.digest(self.activation)
@@ -90,17 +98,25 @@ class Execution(NativeBridge):
         return b,tick
     def admit(self,db,request,uid):
         self.require(self.wrapper is not None,'C_WRAPPER_CONTEXT_REQUIRED')
-        self.check_C(db,self.wrapper,request,uid)
+        self.check_C(db,self.wrapper,request,uid,stage='admit')
         return super().admit(db,request,uid)
     def finish(self,db,request,uid,before):
         super().finish(db,request,uid,before)
         # Check after native and bridge effect staging, inside the actual effect txn.
-        b,tick=self.check_C(db,self.wrapper,request,uid)
+        b,tick=self.check_C(db,self.wrapper,request,uid,stage='finish')
         self.require(not db.execute('SELECT 1 FROM c_permit_consumptions WHERE challenge=?',(b['challenge'],)).fetchone(),'C_PERMIT_CONSUMED')
         result=json.loads(self.business(db,key_text(b['allocation']['key']),b['allocation']['h'])[2])
         db.execute('INSERT INTO c_permit_consumptions VALUES(?,?,?,?,?)',(b['challenge'],q.digest(self.wrapper),self.allocation['rid'],q.digest(result),tick))
         self.final_checks.append(dict(in_native_transaction=db.in_transaction,tick=tick,deadline=b['not_after'],permit_digest=q.digest(self.wrapper)))
     def cut(self,point):
+        if point=='before_commit' and self.case in ('expired_before_commit','expired_before_commit_kill'):
+            # Trusted fixture hook AFTER final sample and consumption staging.
+            with self.marker.open('w') as out:
+                out.write(json.dumps(dict(pid=os.getpid(),uid=os.geteuid(),point=point,
+                    tick=time.monotonic(),deadline=self.wrapper['body']['not_after'])));out.flush();os.fsync(out.fileno())
+            release=self.marker.with_suffix('.release')
+            while not release.exists():time.sleep(.01)
+            return
         if self.case==point:
             with self.marker.open('w') as out:
                 out.write(json.dumps(dict(pid=os.getpid(),uid=os.geteuid(),point=point)));out.flush();os.fsync(out.fileno())
@@ -120,7 +136,7 @@ class Execution(NativeBridge):
                     db.execute('UPDATE sk_control SET epoch=epoch+1 WHERE id=1');db.commit()
         try:
             self.execute_entry_calls+=1;v=super().execute(request,uid,after_precheck=after)
-            return dict(response=v,final_checks=list(self.final_checks),execute_entry_calls=self.execute_entry_calls)
+            return dict(response=v,final_checks=list(self.final_checks),execute_entry_calls=self.execute_entry_calls,check_failures=list(self.check_failures))
         finally:self.wrapper=None
     def history_C(self,uid):
         self.require(uid==62026,'C_ROLE');a=self.allocation
