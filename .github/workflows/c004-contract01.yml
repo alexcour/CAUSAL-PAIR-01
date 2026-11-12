@@ -1,0 +1,38 @@
+name: C004 discriminator — counterexamples, no closure
+on:
+  pull_request:
+    branches: [main]
+    paths: ['c004_commit_contract_01/**', '.github/workflows/c004-contract01.yml']
+  push:
+    branches: [main]
+    paths: ['c004_commit_contract_01/**', '.github/workflows/c004-contract01.yml']
+permissions: {contents: read, actions: read}
+jobs:
+  discriminate:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env: {PYTHONDONTWRITEBYTECODE: '1'}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {ref: '${{ github.event.pull_request.head.sha || github.sha }}', persist-credentials: false}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with: {python-version: '3.12'}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: '13979046352'
+          run-id: '43292958500'
+          repository: alexcour/CAUSAL-PAIR-01
+          github-token: '${{ github.token }}'
+          path: native-parent
+      - name: Receive counterexamples without closing C004
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python -m pip install cryptography==50.0.2
+          python -I -B c004_commit_contract_01/reproduce.py --verify-only
+          python -I -B c004_commit_contract_01/reproduce.py --native-parent-dir "$PWD/native-parent" --out "$PWD/c004-results"
+          git rev-parse HEAD > c004-results/EXECUTED_COMMIT.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with: {name: 'c004-discriminator-${{ github.run_id }}', path: c004-results/, retention-days: 90}
