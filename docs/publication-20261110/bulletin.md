@@ -1,5 +1,17 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation du 12 novembre 2026 — C004 : callback COMMIT et marge conditionnelle
+
+[Contrat candidat02](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_candidate_02/CONTRACT.md) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_candidate_02/RECEPTION.md) · [CI43307079935 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43307079935).
+
+Le véritable callback C SQLite de COMMIT est testé avec marge nulle et marge nominale de500ms. Seize cas sous Windows et seize sous Linux reçoivent chacun quatre COMMITs tardifs, quatre rollbacks après expiration, quatre rollbacks après arrêt du processus et quatre COMMITs ordinaires.64 altérations de preuves sont rejetées par mode ; aucun moteur natif FCI n’est modifié ou relancé.
+
+La condition `g + epsilon + Delta < d` est suffisante si l’erreur d’horloge est bornée par epsilon et si le délai réel du dernier échantillon au COMMIT est borné par Delta. Le modèle de14580 points abstraits compte1170 admissions sous borne sans violation et2214 contre-exemples de marge lorsque la borne de délai ne tient plus. Ce sont des points arithmétiques, pas des transactions physiques. Les rapports Windows/Linux et la relecture locale de l’archive CI concordent octet pour octet ; même auteur, pas d’audit indépendant.
+
+**Aucune borne dure de plateforme n’est établie.** Un callback, une marge configurée, un maximum mesuré ou une alarme après effet ne qualifient pas cette garantie. Le dossier précise les preuves nécessaires pour un mécanisme borné et l’alternative d’une primitive de validation atomique au point d’effet. **C004 ouvert ; M1 HOLD / SR02 BLOCKED.** Les campagnes précédentes conservent leurs périmètres.
+
+---
+
 ## Actualisation du 12 novembre 2026 — C004 : contrat et contre-exemples reçus
 
 [Contrat temporel](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_contract_01/CONTRACT.md) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_contract_01/RECEPTION.md) · [CI43304723750 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43304723750).

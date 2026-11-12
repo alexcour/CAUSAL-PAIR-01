@@ -144,6 +144,42 @@
       "artifact_sha256": "80818d0ece5259faf08ebb6211534d23f9a4c8eb48b77d9b15f7b9a2d3a4c593",
       "cell_count_scope": "per environment; Windows and Linux; same author",
       "independent_audit": false
+    },
+    "C004_commit_hook_candidate02": {
+      "C004_closed": false,
+      "M1": "HOLD",
+      "SR02": "BLOCKED",
+      "hook_cells": 16,
+      "hook_late_commits": 4,
+      "hook_mutants_per_mode": 64,
+      "independent_external_audit": false,
+      "model": {
+        "C004_closed": false,
+        "bounded_margin_admissions": 1170,
+        "bounded_margin_violations": 0,
+        "equality_boundary_refusals": 1575,
+        "mutations_rejected": 24,
+        "physical_bound_proven": false,
+        "rows": 14580,
+        "sample_counterexamples": 5744,
+        "status": "CONDITIONAL_MARGIN_MODEL_RECEIVED",
+        "unbounded_margin_counterexamples": 2214
+      },
+      "native_FCI_rerun": false,
+      "physical_bound_proven": false,
+      "source_manifest_sha256": "baa7380b973d0af4884f39c557fe0ef9ce2c79024a5e1db760ba4bfd0dd3c92a",
+      "status": "HOOK_COUNTEREXAMPLES_AND_CONDITIONAL_MARGIN_RECEIVED",
+      "date": "2026-11-12",
+      "source_url": "https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/c004_commit_candidate_02",
+      "receipt_url": "https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_candidate_02/RECEPTION.md",
+      "ci_url": "https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43307079935",
+      "executed_commit": "046d60c06e8696b0f91010aed8adb550f22bbe54",
+      "artifact_id": 13983942963,
+      "artifact_bytes": 99774,
+      "artifact_sha256": "b13616fd10bb0f277d723c65e81c9c3726a244a092f3aa53c00e3f31d84fb23d",
+      "physical_count_scope": "per execution environment; synthetic SQLite experiment, not native FCI",
+      "model_count_scope": "abstract arithmetic points, not physical transactions",
+      "production_policy_changed": false
     }
   },
   "MIRAGE": {
