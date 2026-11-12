@@ -1,5 +1,17 @@
 # Couret–Unification — Bulletin public du 10 novembre 2026
 
+## Actualisation du 12 novembre 2026 — C004 : contrat de primitive atomique et reprises
+
+[Contrat](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/CONTRACT.md) · [Conformité d’une future implémentation](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/CONFORMANCE.md) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/RECEPTION.md) · [CI43310332533 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43310332533).
+
+Le contrat distingue un nouvel effet autorisé au point atomique et la restitution d’un résultat antérieur. Après un COMMIT avec réponse perdue, un arrêt, l’expiration et une révocation, la même requête retrouve le résultat original sans nouvel effet. Les demandes forgées ou dont le contenu diffère n’accèdent pas à ce résultat.
+
+L’exploration complète du domaine fini reçoit218 états/3270 transitions pour la spécification atomique idéale et560/8400 pour une comparaison séparant contrôle et effet. Le premier modèle ne viole pas les propriétés dans ce domaine ; le second expose44 arêtes d’effet tardif,16 d’époque périmée et60 d’horloge non fiable. Ces catégories se recoupent : ce sont des arêtes abstraites, pas des transactions physiques à additionner. Dix parcours par modèle couvrent expiration, révocation, horloge, arrêt, redémarrage et reprise ;32 preuves altérées sont rejetées par mode. Graphes et rapports concordent octet pour octet entre Windows, Linux et relecture locale de l’archive CI.
+
+**La transition temporelle atomique est une hypothèse du modèle, pas une primitive physique réalisée.** Le dossier liste les preuves encore nécessaires de couplage au point d’effet, horloge, autorité, rétention, sécurité des accès et raffinement. Aucun moteur SQLite ou FCI natif ne tourne dans cette étude. **C004 ouvert ; M1 HOLD / SR02 BLOCKED.** Même auteur, pas d’audit extérieur ni qualification de production.
+
+---
+
 ## Actualisation du 12 novembre 2026 — C004 : callback COMMIT et marge conditionnelle
 
 [Contrat candidat02](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_candidate_02/CONTRACT.md) · [Réception](https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_commit_candidate_02/RECEPTION.md) · [CI43307079935 réussie](https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43307079935).
