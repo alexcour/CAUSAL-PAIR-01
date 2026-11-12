@@ -55,7 +55,7 @@ def phase(a,runtime,work,sd,evidence,row,flags,client,answer,snapshot,context_pa
         epoch=q.rows(x['after_rearm']['stores'],main,'d2_meta')[0]['epoch'] if row['profile']=='FCI' else q.rows(x['after_rearm']['stores'],'reference.db','control')[0]['epoch']
         x['execute_grant']=transition('EXECUTE',x['activation_wait'],owner.pid,epoch)
         x['issue_wrong_role']=ask(62026,'issue_C',dict(challenge='c'*32,ttl=25))
-        x['issue']=ask(62022,'issue_C',dict(challenge='c'*32,ttl=2 if row['execution_case']=='expired_after_precheck' else (5 if row['execution_case'].startswith('expired_before_commit') else 25)))
+        x['issue']=ask(62022,'issue_C',dict(challenge='c'*32,ttl=5 if row['execution_case']=='expired_after_precheck' or row['execution_case'].startswith('expired_before_commit') else 25))
         q.need(x['issue']['response']['ok'],'FRESH_NATIVE_C_PERMIT');issued=x['issue']['response']['result']['result']
         x['execute_wrong_roles']=[ask(uid,'execute_C',issued) for uid in (62022,62023,62024,62025)]
         from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey as Key
@@ -112,6 +112,7 @@ def phase(a,runtime,work,sd,evidence,row,flags,client,answer,snapshot,context_pa
             x['resume_after']=snapshot(runtime,row['profile']);x['resume_wait']=stop(owner)
         else:
             x['execute']=answer(pending);x['after_effect']=snapshot(runtime,row['profile'])
+            x['post_execute_diagnostics']=ask(62026,'diagnostics_C')
             x['history']=ask(62026,'history_C');x['history_repeat']=ask(62026,'history_C')
             if row['execution_case']=='success':x['repeat_execute']=ask(62026,'execute_C',issued)
             x['native_wait']=stop(owner)

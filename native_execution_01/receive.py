@@ -14,7 +14,7 @@ def load(p):return json.loads(p.read_text())
 def peer(c,uid):
     q.need(c['client_uid']==uid and c['response']['peer']==dict(pid=c['client_pid'],uid=uid,gid=uid),'C_KERNEL_PEER');return c['response']
 def result(c,uid,op,pin,policy):
-    w=peer(c,uid);q.need(w['ok'] is True,'C_RPC_SUCCESS');v=w['result'];b=q.verify(v['receipt'],pin,RPC)
+    w=peer(c,uid);q.need(w['ok'] is True,'C_RPC_SUCCESS:'+op+':observed='+json.dumps(w,sort_keys=True));v=w['result'];b=q.verify(v['receipt'],pin,RPC)
     q.need(b==dict(schema='FCI-C-NATIVE-EXECUTION-RPC/1',op=op,uid=uid,result_digest=q.digest(v['result']),execution_policy=policy),'C_RPC_SIGNATURE_AND_BINDING');return v['result']
 def denied(c,uid,code=None):
     w=peer(c,uid);q.need(w['ok'] is False and type(w['error']) is str and (code is None or w['error']==code),'C_EXACT_REFUSAL:'+str(code)+':observed='+json.dumps(w,sort_keys=True))
@@ -48,7 +48,7 @@ def one(r,sources):
         execution_policy=policy,owner_pid=x['native_ready']['pid'],native_epoch=grants['execute_grant']['native_epoch'],boot_id=grants['execute_grant']['boot_id'],not_before=bp['not_before'],not_after=bp['not_after']),'EXACT_FRESH_C_PERMIT')
     q.need(na['subject_uid']==bp['subject_uid']==62026 and na['operation_id']==bp['native_operation_id']==rid and na['authority_epoch']==p['native_epoch']
         and bp['generation']==3 and bp['attempt_id']==allocation['attempt_id'] and bp['key']==allocation['key'] and bp['content_hash']==allocation['h']
-        and bp['native_digest']==q.digest(request['native']) and p['not_after']==p['not_before']+(2 if case=='expired_after_precheck' else (5 if case.startswith('expired_before_commit') else 25)),'NATIVE_C_SIGNATURES_AND_EPOCH')
+        and bp['native_digest']==q.digest(request['native']) and p['not_after']==p['not_before']+(5 if case=='expired_after_precheck' or case.startswith('expired_before_commit') else 25),'NATIVE_C_SIGNATURES_AND_EPOCH')
     for k,v in request['native']['operation'].items():q.need(na[k]==v,'NATIVE_C_OPERATION_BINDING')
     for call,uid in zip(x['execute_wrong_roles'],(62022,62023,62024,62025)):denied(call,uid,'UNKNOWN_UID' if uid==62025 else 'C_ROLE')
     probes=x['negative_probes']
@@ -92,6 +92,12 @@ def one(r,sources):
     q.need(all(e['operation_id']==rid for e in effects),'NO_OLD_A_OR_B_EFFECT')
     business=q.rows(stores,main,'sk_business')[0];attempts=q.rows(stores,main,'sk_attempts');c=next(z for z in attempts if z['rid']==rid)
     q.need(len(attempts)==3 and all(z['state']=='FENCED' for z in attempts if z['rid']!=rid),'PREDECESSORS_STAY_FENCED')
+    if case in ('expired_after_precheck','revoked_after_precheck'):
+        diagnostic=get('post_execute_diagnostics',62026,'diagnostics_C')
+        q.need(diagnostic['execute_entry_calls']==1 and diagnostic['check_failures'],'AFTER_PRECHECK_ENTERED_NATIVE')
+        last=diagnostic['check_failures'][-1]
+        q.need(last['stage'] in ('admit','finish') and last['in_native_transaction'] is True
+            and last['code']==('C_PERMIT_EXPIRED' if case=='expired_after_precheck' else 'C_REVOKED'),'REFUSAL_REACHED_NATIVE_TRANSACTION')
     history=get('history',62026,'history_C');again=get('history_repeat',62026,'history_C');q.need(history==again,'IDENTICAL_C_HISTORY')
     if has_effect:
         value=json.loads(business['result']);result_body=q.verify(value,pin,b'SAME-K-NATIVE-BRIDGE-RESULT/1\0');record=cons[0]
