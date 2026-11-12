@@ -180,6 +180,56 @@
       "physical_count_scope": "per execution environment; synthetic SQLite experiment, not native FCI",
       "model_count_scope": "abstract arithmetic points, not physical transactions",
       "production_policy_changed": false
+    },
+    "C004_atomic_sink_spec03": {
+      "C004_closed": false,
+      "M1": "HOLD",
+      "SR02": "BLOCKED",
+      "evidence_mutations_rejected": 32,
+      "independent_external_audit": false,
+      "models": [
+        {
+          "cached_reply_edges": 232,
+          "edges": 3270,
+          "late_effect_edges": 0,
+          "mode": "ATOMIC_SPEC",
+          "new_effect_edges": 20,
+          "probes": 10,
+          "stale_epoch_edges": 0,
+          "states": 218,
+          "unknown_reply_edges": 10,
+          "untrusted_clock_edges": 0
+        },
+        {
+          "cached_reply_edges": 768,
+          "edges": 8400,
+          "late_effect_edges": 44,
+          "mode": "SPLIT_SAMPLE",
+          "new_effect_edges": 120,
+          "probes": 10,
+          "stale_epoch_edges": 16,
+          "states": 560,
+          "unknown_reply_edges": 60,
+          "untrusted_clock_edges": 60
+        }
+      ],
+      "native_FCI_execution": false,
+      "physical_primitive_implemented": false,
+      "production_qualified": false,
+      "real_platform_bound_proven": false,
+      "source_manifest_sha256": "bac4577982dad64670f5a5b42bbff5cbba6f90a3427857482ce119d8c5ff6895",
+      "status": "ABSTRACT_ATOMIC_SINK_CONTRACT_RECEIVED",
+      "date": "2026-11-12",
+      "source_url": "https://github.com/alexcour/CAUSAL-PAIR-01/tree/main/c004_atomic_sink_03",
+      "receipt_url": "https://github.com/alexcour/CAUSAL-PAIR-01/blob/main/c004_atomic_sink_03/RECEPTION.md",
+      "ci_url": "https://github.com/alexcour/CAUSAL-PAIR-01/actions/runs/43310332533",
+      "executed_commit": "d7e5d42a69e8859accc7a9a8ae6e645327a07255",
+      "artifact_id": 13985447394,
+      "artifact_bytes": 64461,
+      "artifact_sha256": "aafb1f0edaab90d26a4e6c94fcedc60833faa09b131129b483b74044b6e9e9c2",
+      "count_scope": "finite abstract states/edges, not physical transactions; violation categories overlap",
+      "atomic_timed_transition": "ASSUMED_SPECIFICATION_NOT_IMPLEMENTED",
+      "production_policy_changed": false
     }
   },
   "MIRAGE": {
