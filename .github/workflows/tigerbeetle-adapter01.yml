@@ -1,0 +1,30 @@
+name: TigerBeetle adapter 01
+on:
+  pull_request:
+    paths:
+      - 'tigerbeetle_adapter_01/**'
+      - '.github/workflows/tigerbeetle-adapter01.yml'
+permissions:
+  contents: read
+jobs:
+  synthetic-ledger:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tigerbeetle_adapter_01/bootstrap.py --runtime runner-runtime
+      - name: Capture and receive normal and optimized
+        run: |
+          python tigerbeetle_adapter_01/capture.py --runtime runner-runtime --out evidence/normal
+          python tigerbeetle_adapter_01/receive.py evidence/normal/capture.json > evidence/normal/receipt.json
+          python -O tigerbeetle_adapter_01/capture.py --runtime runner-runtime --out evidence/optimized
+          python -O tigerbeetle_adapter_01/receive.py evidence/optimized/capture.json > evidence/optimized/receipt.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tigerbeetle-adapter01
+          path: evidence/
+          retention-days: 30
