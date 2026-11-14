@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "<audit_workspace>\original\causal_fiber_01\experiment.py", line 43, in <module>
+    print(json.dumps(run(), indent=2))
+                     ^^^^^
+  File "<audit_workspace>\original\causal_fiber_01\experiment.py", line 35, in run
+    assert all(verdict(h) == h.receipt and extra(h) for h in HISTORIES)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

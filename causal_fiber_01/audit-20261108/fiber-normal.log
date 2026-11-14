@@ -1,0 +1,18 @@
+{
+  "scope": "synthetic, no FCI execution",
+  "collisions": [
+    [
+      "timely",
+      "late"
+    ],
+    [
+      "timely",
+      "stale"
+    ]
+  ],
+  "minimum_extra_bits_for_pair": 1,
+  "binary_enrichments_checked": 16,
+  "sufficient_binary_enrichments": 4,
+  "checks_active_under_optimization": true,
+  "tests_passed": true
+}

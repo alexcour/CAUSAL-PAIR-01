@@ -1,0 +1,10 @@
+<audit_workspace>\original\causal_fiber_01\CausalFiber01.lean:37:33: error: Dependent elimination failed: Failed to solve equation
+  p b = p a
+<audit_workspace>\original\causal_fiber_01\CausalFiber01.lean:44:6: error: Application type mismatch: The argument
+  Eq.symm (Classical.choose_spec (Exists.intro h rfl))
+has type
+  Eq.{u + 1} (Classical.choose ⋯) h
+but is expected to have type
+  Eq.{v + 1} (p h) (p (Classical.choose ⋯))
+in the application
+  hc h (Classical.choose (Exists.intro h rfl)) (Eq.symm (Classical.choose_spec (Exists.intro h rfl)))

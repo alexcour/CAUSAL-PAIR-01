@@ -1,0 +1,105 @@
+{
+  "status": "PASS_FINITE_TRACE_BRIDGE",
+  "cases": 10,
+  "databases_checked_read_only": 30,
+  "input_sha256": "ad5c74fd402dc4bce9bd5e7b9483d33bd7bb1ffc6ba734388672a5bdb296df88",
+  "pairs": [
+    {
+      "policy": "blind_replay",
+      "same_observation": true,
+      "final_effects": [
+        1,
+        2
+      ],
+      "required_actions": [
+        "EXECUTE",
+        "RETURN_PRIOR"
+      ]
+    },
+    {
+      "policy": "check_before_call",
+      "same_observation": true,
+      "final_effects": [
+        1,
+        2
+      ],
+      "required_actions": [
+        "EXECUTE",
+        "RETURN_PRIOR"
+      ]
+    },
+    {
+      "policy": "conservative_standard",
+      "same_observation": true,
+      "final_effects": [
+        0,
+        1
+      ],
+      "required_actions": [
+        "EXECUTE",
+        "RETURN_PRIOR"
+      ]
+    },
+    {
+      "policy": "fci_candidate_rule",
+      "same_observation": true,
+      "final_effects": [
+        0,
+        1
+      ],
+      "required_actions": [
+        "EXECUTE",
+        "RETURN_PRIOR"
+      ]
+    },
+    {
+      "policy": "authoritative_witness_control",
+      "same_observation": false,
+      "final_effects": [
+        1,
+        1
+      ],
+      "required_actions": [
+        "EXECUTE",
+        "RETURN_PRIOR"
+      ]
+    }
+  ],
+  "shared_actions": [
+    {
+      "action": "EXECUTE",
+      "final_effects": [
+        1,
+        2
+      ],
+      "safe_in_both": false,
+      "empty_completed": true
+    },
+    {
+      "action": "RETURN_PRIOR",
+      "final_effects": [
+        0,
+        1
+      ],
+      "safe_in_both": true,
+      "empty_completed": false
+    },
+    {
+      "action": "BLOCK_UNCERTAIN",
+      "final_effects": [
+        0,
+        1
+      ],
+      "safe_in_both": true,
+      "empty_completed": false
+    }
+  ],
+  "scope": "one quiescent operation, initial effects 0/1, non-idempotent receiver",
+  "not_established": [
+    "production FCI",
+    "physical enforcement",
+    "formal refinement",
+    "in-flight request safety",
+    "independent review"
+  ]
+}

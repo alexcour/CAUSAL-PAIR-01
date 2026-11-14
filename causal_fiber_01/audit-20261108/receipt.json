@@ -1,0 +1,171 @@
+{
+  "status": "PASS_LOCAL_AUDIT",
+  "source_base_commit": "09b23d3b5bd5213680973480fef8ec823c27d5e0",
+  "lean_version": "Lean (version 4.29.1, x86_64-w64-windows-gnu, commit f72c35b3f637c8c6571d353742168ab66cc22c00, Release)",
+  "python_version": "3.12.14",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python_modes": [
+    0,
+    1
+  ],
+  "sqlite_cases": 20,
+  "sqlite_files_checked_read_only": 60,
+  "unit_test_executions": 10,
+  "mutants_rejected": 8,
+  "lean_negative_control_rejected": true,
+  "source_sha256": {
+    "causal_fiber_01/Audit.lean": "81578fd79a1f34bb354dc881659b2441defce4ec65f7dc15ca60d37a91b5a4df",
+    "causal_fiber_01/bridge.py": "cf7777ea5feebd565a6165232be37c42db11d3b2cda588e1e434aedf48f905c0",
+    "causal_fiber_01/CausalFiber01.lean": "bcff7eeabd153cd20f42ccd810dd20c074c9a899271ba5d29a4d6ed056b197ad",
+    "causal_fiber_01/experiment.py": "7fea36f9afdbf726b364c0529ae81fd24e9726a3cf2f78da006dcd83a4c44d0c",
+    "causal_fiber_01/lean-toolchain": "7dc000621e0046d1aada809e2b7177e64454645cf4c741e9daaf79c99ec2e7a2",
+    "causal_fiber_01/README.md": "76d4d08063823d86b64b5659365513c140207e9c010b7300a5116c1bdeb1eace",
+    "causal_fiber_01/RESEARCH_NOTE.md": "fc6a08e20bcd1c2ce236da79f458da3e47e90f097cd74ec84c5e722cba72c095",
+    "causal_fiber_01/test_experiment.py": "c074b9c2c129a16d017414d40266e3304243fb3492ba84c48c9215d0898a68d3",
+    "causal_fiber_01/verify.py": "dd08315fa28e76ba3ff9f856a5f3e932f9ba7da3c147306f468252a5389e6a45",
+    "causal_pair_01/experiment.py": "b63e9e0d38440a48d0cb35283d18563343c71e756414fbd09e1cacfd5186f23e"
+  },
+  "commands": [
+    {
+      "name": "lean-version",
+      "command": [
+        "<lean-4.29.1>",
+        "--version"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "lean-compile",
+      "command": [
+        "<lean-4.29.1>",
+        "-o",
+        "<audit_workspace>\\verification-final\\CausalFiber01.olean",
+        "CausalFiber01.lean"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "lean-axioms",
+      "command": [
+        "<lean-4.29.1>",
+        "Audit.lean"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "lean-negative",
+      "command": [
+        "<lean-4.29.1>",
+        "<audit_workspace>\\verification-final\\NegativeCollision.lean"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 1,
+      "expected_exit_code": 1
+    },
+    {
+      "name": "fiber-normal",
+      "command": [
+        "<python>",
+        "experiment.py"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "mutations-normal",
+      "command": [
+        "<python>",
+        "-m",
+        "unittest",
+        "-v",
+        "test_experiment.py"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "pair-normal",
+      "command": [
+        "<python>",
+        "<repository>\\causal_pair_01\\experiment.py",
+        "--out",
+        "<audit_workspace>\\verification-final\\pair-normal"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "bridge-normal",
+      "command": [
+        "<python>",
+        "bridge.py",
+        "--root",
+        "<audit_workspace>\\verification-final\\pair-normal"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "fiber-optimized",
+      "command": [
+        "<python>",
+        "-O",
+        "experiment.py"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "mutations-optimized",
+      "command": [
+        "<python>",
+        "-O",
+        "-m",
+        "unittest",
+        "-v",
+        "test_experiment.py"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "pair-optimized",
+      "command": [
+        "<python>",
+        "-O",
+        "<repository>\\causal_pair_01\\experiment.py",
+        "--out",
+        "<audit_workspace>\\verification-final\\pair-optimized"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "name": "bridge-optimized",
+      "command": [
+        "<python>",
+        "-O",
+        "bridge.py",
+        "--root",
+        "<audit_workspace>\\verification-final\\pair-optimized"
+      ],
+      "cwd": "<repository>\\causal_fiber_01",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    }
+  ],
+  "scope": "finite models and measured SQLite traces; no production FCI/refinement/physical validation"
+}

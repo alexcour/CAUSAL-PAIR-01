@@ -1,0 +1,30 @@
+{
+  "commit": "09b23d3b5bd5213680973480fef8ec823c27d5e0",
+  "runs": [
+    {
+      "name": "original-lean",
+      "exit_code": 1,
+      "meaning": "original source fails"
+    },
+    {
+      "name": "original-python-normal",
+      "exit_code": 1,
+      "meaning": "original source fails"
+    },
+    {
+      "name": "original-python-optimized",
+      "exit_code": 0,
+      "meaning": "assertions disabled"
+    }
+  ],
+  "source_hashes": {
+    "CausalFiber01.lean": {
+      "sha256": "d718617e8c88248458949fc6c3eb65e73141b50b3383facae9c943731b1b35af",
+      "git_blob_sha1": "e3b1bb6ac4214e9268dbeec4ceba328d43720040"
+    },
+    "experiment.py": {
+      "sha256": "4231439f5e38930f3ace66aba21083b221b3c1d08315e1b62e2f3885b69531e1",
+      "git_blob_sha1": "b1f752a690394d2251cbeb2592c8f88c78312638"
+    }
+  }
+}

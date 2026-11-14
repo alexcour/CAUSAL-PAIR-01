@@ -1,0 +1,15 @@
+'factor_implies_fiber_constant' does not depend on any axioms
+'collision_no_factor' does not depend on any axioms
+'image_reconstructible_iff_fiber_constant' depends on axioms: [Classical.choice]
+'no_reconstructor' does not depend on any axioms
+'enriched_exact' does not depend on any axioms
+'extra_must_separate' does not depend on any axioms
+'missing_refused' does not depend on any axioms
+'stale_refused' does not depend on any axioms
+'late_refused' does not depend on any axioms
+'conservative_sound' does not depend on any axioms
+'sound_policy_iff_uniform' does not depend on any axioms
+'Recovery.no_exact_recovery' does not depend on any axioms
+'Recovery.no_safe_and_live_shared_action' depends on axioms: [propext, Quot.sound]
+'Recovery.block_safe' depends on axioms: [propext]
+'Recovery.block_not_live' depends on axioms: [propext]
